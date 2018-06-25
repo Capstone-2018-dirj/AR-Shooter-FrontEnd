@@ -1,28 +1,52 @@
 import React, { Component } from 'react';
-import { Content, Form, Item, Input, Label, Button, Icon } from 'native-base';
+import {
+  Content,
+  Form,
+  Item,
+  Input,
+  Label,
+  Button,
+  Icon,
+  Toast
+} from 'native-base';
 import { Text, View } from 'react-native';
 
 export default class Rooms extends Component {
   constructor() {
     super();
     this.state = {
-      name: ''
+      name: '',
+      showToast: false
     };
-    this.handleStartGame = this.handleStartGame.bind(this);
+    this.handleAllRooms = this.handleAllRooms.bind(this);
     this.createRoom = this.createRoom.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
   createRoom() {
-    console.log(this.state.name);
-    this.props.navigation.state.params.socket.emit('createRoom', this.state.name);
+    if (this.state.name) {
+      this.props.navigation.state.params.socket.emit(
+        'createRoom',
+        this.state.name
+      );
+      Toast.show({
+        text: 'Room Created!',
+        position: 'top',
+        buttonText: 'Okay'
+      });
+    } else {
+      Toast.show({
+        text: 'Please Enter Room Name!',
+        buttonText: 'Okay'
+      });
+    }
   }
   handleChange(text) {
     this.setState({ name: text });
   }
-  handleStartGame() {
+  handleAllRooms() {
     const { navigate } = this.props.navigation;
-    navigate('ARScene', { socket: this.props.navigation.state.params.socket });
+    navigate('AllRooms', { socket: this.props.navigation.state.params.socket });
   }
 
   render() {
@@ -47,11 +71,11 @@ export default class Rooms extends Component {
             </Button>
           </Form>
           <Button
-            onPress={this.handleStartGame}
+            onPress={this.handleAllRooms}
             style={{ marginTop: 40 }}
             full
             light>
-            <Text style={{ letterSpacing: 2 }}>Start Game</Text>
+            <Text style={{ letterSpacing: 2 }}>Join a Room</Text>
           </Button>
         </Content>
       </View>

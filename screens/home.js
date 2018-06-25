@@ -11,7 +11,7 @@ import {
   Button
 } from 'native-base';
 import { Text, View } from 'react-native';
-const host = 'http://172.16.25.211:3030';
+const host = 'http://172.16.25.175:3030';
 
 export default class FloatingLabelExample extends Component {
   constructor() {
@@ -31,7 +31,7 @@ export default class FloatingLabelExample extends Component {
           <Text style={styles.title}>AR SHOOTER </Text>
           <Form>
             <Item floatingLabel>
-              <Label>Name</Label>
+              <Label>Player Name</Label>
               <Input />
             </Item>
             <Button
