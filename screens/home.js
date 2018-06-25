@@ -21,7 +21,7 @@ export default class FloatingLabelExample extends Component {
     this.handleCreateRooms = this.handleCreateRooms.bind(this);
   }
 
-  handlePress() {
+  handleCreateRooms() {
     const { navigate } = this.props.navigation;
     navigate('ARScene', { socket: this.socket });
   }
@@ -35,6 +35,13 @@ export default class FloatingLabelExample extends Component {
               <Label>Name</Label>
               <Input />
             </Item>
+            <Button
+              onPress={this.handleCreateRooms}
+              style={{ marginTop: 40 }}
+              full
+              light>
+              <Text style={{ letterSpacing: 2 }}>Join/Create a Room</Text>
+            </Button>
           </Form>
         </Content>
       </View>

@@ -20,9 +20,9 @@ export default class Rooms extends Component {
   handleChange(text) {
     this.setState({ name: text });
   }
-  handleStartGame() {
+  handleAllRooms() {
     const { navigate } = this.props.navigation;
-    navigate('ARScene', { socket: this.props.navigation.state.params.socket });
+    navigate('AllRooms', { socket: this.props.navigation.state.params.socket });
   }
 
   render() {
