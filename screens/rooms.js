@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Content, Form, Item, Input, Label, Button } from 'native-base';
+import { Content, Form, Item, Input, Label, Button, Icon } from 'native-base';
 import { Text, View } from 'react-native';
 
-export default class FloatingLabelExample extends Component {
+export default class Rooms extends Component {
   constructor() {
     super();
     this.state = {
@@ -23,6 +23,9 @@ export default class FloatingLabelExample extends Component {
   render() {
     return (
       <View style={styles.main}>
+        <Button transparent onPress={() => this.props.navigation.goBack()}>
+          <Icon style={styles.backButton} name="arrow-back" />
+        </Button>
         <Content style={styles.items}>
           <Text style={styles.title}>LOBBY </Text>
           <Form>
@@ -60,5 +63,8 @@ const styles = {
   items: {
     marginLeft: 20,
     marginRight: 20
+  },
+  backButton: {
+    color: 'black'
   }
 };

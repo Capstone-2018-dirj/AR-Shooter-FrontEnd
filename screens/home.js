@@ -20,10 +20,7 @@ export default class FloatingLabelExample extends Component {
     this.handleStartGame = this.handleStartGame.bind(this);
     this.handleCreateRooms = this.handleCreateRooms.bind(this);
   }
-  componentDidMount() {
-    this.socket.emit('createRoom', "David's room");
-    console.log('rooms', this.socket.rooms);
-  }
+
   handleStartGame() {
     const { navigate } = this.props.navigation;
     navigate('ARScene', { socket: this.socket });
