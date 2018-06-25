@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 import Home from './screens/home';
 import ARScene from './screens/ARScene';
 import GameOver from './screens/gameOver';
+import Rooms from './screens/rooms';
 import { Font, AppLoading } from 'expo';
 
 export default class App extends React.Component {
@@ -34,7 +35,8 @@ const RootNavigator = createStackNavigator(
   {
     Home: { screen: Home },
     ARScene: { screen: ARScene },
-    GameOver: { screen: GameOver }
+    GameOver: { screen: GameOver },
+    Rooms: { screen: Rooms }
   },
   {
     headerMode: 'none',

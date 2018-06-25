@@ -11,18 +11,27 @@ import {
   Button
 } from 'native-base';
 import { Text, View } from 'react-native';
-const host = "http://172.16.25.175:3030";
+const host = 'http://172.16.25.211:3030';
 
 export default class FloatingLabelExample extends Component {
   constructor() {
     super();
     this.socket = io(host);
-    this.handlePress = this.handlePress.bind(this);
+    this.handleStartGame = this.handleStartGame.bind(this);
+    this.handleCreateRooms = this.handleCreateRooms.bind(this);
+  }
+  componentDidMount() {
+    this.socket.emit('createRoom', "David's room");
+    console.log('rooms', this.socket.rooms);
+  }
+  handleStartGame() {
+    const { navigate } = this.props.navigation;
+    navigate('ARScene', { socket: this.socket });
   }
 
-  handlePress() {
+  handleCreateRooms() {
     const { navigate } = this.props.navigation;
-    navigate('ARScene', {socket: this.socket});
+    navigate('Rooms', { socket: this.socket });
   }
   render() {
     return (
@@ -34,9 +43,20 @@ export default class FloatingLabelExample extends Component {
               <Label>Name</Label>
               <Input />
             </Item>
+            <Button
+              onPress={this.handleCreateRooms}
+              style={{ marginTop: 40 }}
+              full
+              light>
+              <Text style={{ letterSpacing: 2 }}>Join/Create a Room</Text>
+            </Button>
           </Form>
         </Content>
-        <Button onPress={this.handlePress} style={{ marginTop: 40 }} full light>
+        <Button
+          onPress={this.handleStartGame}
+          style={{ marginTop: 40 }}
+          full
+          light>
           <Text style={{ letterSpacing: 2 }}>Start Game</Text>
         </Button>
       </View>

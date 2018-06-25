@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { AR } from 'expo';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
-import { Button } from 'native-base';
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 
 // Let's also import `expo-graphics`
@@ -35,9 +34,15 @@ export default class App extends React.Component {
     // `arTrackingConfiguration` denotes which camera the AR Session will use.
     // World for rear, Face for front (iPhone X only)
     return (
-      <TouchableOpacity style={{ flex: 1 }} onPress={this.showPosition}>
+      <TouchableOpacity
+        style={{
+          flex: 1
+        }}
+        onPress={this.showPosition}>
         <GraphicsView
-          style={{ flex: 5 }}
+          style={{
+            flex: 5
+          }}
           onContextCreate={this.onContextCreate}
           onRender={this.onRender}
           onResize={this.onResize}
@@ -45,7 +50,7 @@ export default class App extends React.Component {
           // isArRunningStateEnabled
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
-        />
+        />{' '}
       </TouchableOpacity>
     );
   }
@@ -72,29 +77,27 @@ export default class App extends React.Component {
     // Ex: When we look down this camera will rotate to look down too!
 
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
+    this.createCrosshair();
 
-    //CUBE
+    //sphere
     // Simple color material
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
-    const geometry = new THREE.BoxGeometry(0.01, 0.01, 0.01);
-
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xff00ff
-    });
+    const geometry = new THREE.SphereGeometry( 0.0154);
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000});
 
     // Combine our geometry and material
-    this.cube = new THREE.Mesh(geometry, material);
-    this.cube.position.z = -1;
-    this.cube.position.x = this.camera.position.x;
-    this.cube.position.y = this.camera.position.y;
-    // Add the cube to the scene
+    this.sphere = new THREE.Mesh(geometry, material);
+    this.sphere.position.z = -1;
+    this.sphere.position.x = this.camera.position.x;
+    this.sphere.position.y = this.camera.position.y;
+    // Add the sphere to the scene
     //=======================================================================
 
-    // Setup a light so we can see the cube color
+    // Setup a light so we can see the sphere color
     // AmbientLight colors all things in the scene equally.
     this.scene.add(new THREE.AmbientLight(0xffffff));
 
-    this.scene.add(this.cube);
+    this.scene.add(this.sphere);
   };
 
   // When the phone rotates, or the view changes size, this method will be called.
@@ -114,11 +117,33 @@ export default class App extends React.Component {
     // Finally render the scene with the AR Camera
     this.camera.getWorldPosition(this.position);
     this.camera.getWorldDirection(this.aim);
-    this.cube.position.x = this.position.x + this.aim.x;
-    this.cube.position.y = this.position.y + this.aim.y;
-    this.cube.position.z = this.position.z + this.aim.z;
+    this.sphere.position.x = this.position.x + this.aim.x;
+    this.sphere.position.y = this.position.y + this.aim.y;
+    this.sphere.position.z = this.position.z + this.aim.z;
     this.renderer.render(this.scene, this.camera);
   };
+
+  createCrosshair() {
+    // crosshair size
+    let x = 0.05,
+      y = 0.05;
+
+    let geometry = new THREE.Geometry();
+    let material = new THREE.LineBasicMaterial({
+      color: 0xaaffaa
+    });
+
+    // crosshair
+    geometry.vertices.push(new THREE.Vector3(0, y, 0));
+    geometry.vertices.push(new THREE.Vector3(0, -y, 0));
+    geometry.vertices.push(new THREE.Vector3(0, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(x, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(-x, 0, 0));
+
+    this.crosshair = new THREE.Line(geometry, material);
+    this.camera.add(this.crosshair);
+    this.scene.add(this.camera);
+  }
 
   showPosition = () => {
     const geometry = new THREE.CylinderGeometry(.05, .05, 1)
@@ -130,6 +155,7 @@ export default class App extends React.Component {
     laser.rotation.y = this.aim.y
     laser.position.z = this.position.z + this.aim.z
     this.scene.add(laser)
+    
     this.props.navigation.state.params.socket.emit('position', {
       position: this.position,
       aim: this.aim
