@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { AR } from 'expo';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
-import { Button } from 'native-base';
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 
 // Let's also import `expo-graphics`
@@ -35,9 +34,15 @@ export default class App extends React.Component {
     // `arTrackingConfiguration` denotes which camera the AR Session will use.
     // World for rear, Face for front (iPhone X only)
     return (
-      <TouchableOpacity style={{ flex: 1 }} onPress={this.showPosition}>
+      <TouchableOpacity
+        style={{
+          flex: 1
+        }}
+        onPress={this.showPosition}>
         <GraphicsView
-          style={{ flex: 5 }}
+          style={{
+            flex: 5
+          }}
           onContextCreate={this.onContextCreate}
           onRender={this.onRender}
           onResize={this.onResize}
@@ -45,7 +50,7 @@ export default class App extends React.Component {
           // isArRunningStateEnabled
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
-        />
+        />{' '}
       </TouchableOpacity>
     );
   }
@@ -72,29 +77,28 @@ export default class App extends React.Component {
     // Ex: When we look down this camera will rotate to look down too!
 
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
+    this.createCrosshair();
 
     //CUBE
     // Simple color material
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
-    const geometry = new THREE.BoxGeometry(0.01, 0.01, 0.01);
-
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xff00ff
-    });
+    // const geometry = new THREE.CircleGeometry(0.01, 0.01);
+    // const material = new THREE.MeshPhongMaterial({
+    //   color: 0xff00ff
+    // });
 
     // Combine our geometry and material
-    this.cube = new THREE.Mesh(geometry, material);
-    this.cube.position.z = -1;
-    this.cube.position.x = this.camera.position.x;
-    this.cube.position.y = this.camera.position.y;
+    // this.cube = new THREE.Mesh(geometry, material);
+    // this.cube.position.z = -1;
+    // this.cube.position.x = this.camera.position.x;
+    // this.cube.position.y = this.camera.position.y;
     // Add the cube to the scene
     //=======================================================================
 
     // Setup a light so we can see the cube color
     // AmbientLight colors all things in the scene equally.
     this.scene.add(new THREE.AmbientLight(0xffffff));
-
-    this.scene.add(this.cube);
+    this.scene.add(this.crosshair);
   };
 
   // When the phone rotates, or the view changes size, this method will be called.
@@ -114,51 +118,36 @@ export default class App extends React.Component {
     // Finally render the scene with the AR Camera
     this.camera.getWorldPosition(this.position);
     this.camera.getWorldDirection(this.aim);
-    this.cube.position.x = this.position.x + this.aim.x;
-    this.cube.position.y = this.position.y + this.aim.y;
-    this.cube.position.z = this.position.z + this.aim.z;
+    this.crosshair.position.x = this.position.x + this.aim.x;
+    this.crosshair.position.y = this.position.y + this.aim.y;
+    this.crosshair.position.z = this.position.z + this.aim.z;
+
     this.renderer.render(this.scene, this.camera);
   };
 
+  createCrosshair() {
+    // crosshair size
+    let x = 0.05,
+      y = 0.05;
+
+    let geometry = new THREE.Geometry();
+    let material = new THREE.LineBasicMaterial({
+      color: 0xaaffaa
+    });
+
+    // crosshair
+    geometry.vertices.push(new THREE.Vector3(0, y, 0));
+    geometry.vertices.push(new THREE.Vector3(0, -y, 0));
+    geometry.vertices.push(new THREE.Vector3(0, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(x, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(-x, 0, 0));
+
+    this.crosshair = new THREE.Line(geometry, material);
+    this.camera.add(this.crosshair);
+    this.scene.add(this.camera);
+  }
+
   showPosition = () => {
-    // Assuming player2 is at position (1, -1), (x, z)
-    // Player one facing negative z axis.
-    // flip z axis sign for player facing positive z axis.
-    // player2x - player1x
-    // let x = 1 - position.x;
-    // // player1z - player2z
-    // let z = position.z + 1;
-    // // angle needed to hit.
-    // let thetaNeeded = Math.atan(x / z);
-    // // actual viewing angle.
-    // let theta = Math.atan(aim.x / aim.z); // positive if on other side of z axis.
-    // if (aim.z < 0) theta *= -1;
-    // console.log('theta needed: ', THREE.Math.radToDeg(thetaNeeded));
-    // console.log('current theta: ', THREE.Math.radToDeg(theta));
-    // // pythagorean thm.
-    // let magnitude = Math.sqrt(
-    //   Math.pow(1 - position.x, 2) + Math.pow(position.z + 1, 2)
-    // );
-    // // xsin(theta)
-    // let vx = Math.sin(theta) * magnitude;
-    // // zcos(theta)
-    // let vz = Math.cos(theta) * magnitude; // positive if on other side of z axis.
-    // if (aim.z < 0) vz *= -1;
-    // // given theta and origin => destination.
-    // const destination = {
-    //   x: position.x + vx,
-    //   z: position.z + vz
-    // };
-    // console.log(`destination: (${destination.x}, ${destination.z})`);
-    // // let bufferTheta = Math.abs(theta - thetaNeeded);
-    // let bufferX = Math.abs(1 - destination.x);
-    // let bufferZ = Math.abs(destination.z + 1);
-    // // console.log('bufferTheta: ', bufferTheta);
-    // console.log('bufferX: ', bufferX);
-    // console.log('bufferZ: ', bufferZ);
-    // if (/*bufferTheta < 0.1 && */ bufferX < 0.05 && bufferZ < 0.05)
-    //   console.log('HIT!!!!');
-    // else console.log('miss....');
     this.props.navigation.state.params.socket.emit('position', {
       position: this.position,
       aim: this.aim
