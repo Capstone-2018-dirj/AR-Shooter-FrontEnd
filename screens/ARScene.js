@@ -10,11 +10,15 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 
+const MAXRANGE = 5;
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.position = new THREE.Vector3();
     this.aim = new THREE.Vector3();
+    this.clock = new THREE.Clock();
+    this.arrows = [];
   }
   componentDidMount() {
     // Turn off extra warnings
@@ -38,7 +42,8 @@ export default class App extends React.Component {
         style={{
           flex: 1
         }}
-        onPress={this.showPosition}>
+        onPress={this.showPosition}
+      >
         <GraphicsView
           style={{
             flex: 5
@@ -77,13 +82,12 @@ export default class App extends React.Component {
     // Ex: When we look down this camera will rotate to look down too!
 
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
-    this.createCrosshair();
 
     //sphere
     // Simple color material
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
-    const geometry = new THREE.SphereGeometry( 0.0154);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000});
+    const geometry = new THREE.SphereGeometry(0.0154);
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
     // Combine our geometry and material
     this.sphere = new THREE.Mesh(geometry, material);
@@ -120,42 +124,54 @@ export default class App extends React.Component {
     this.sphere.position.x = this.position.x + this.aim.x;
     this.sphere.position.y = this.position.y + this.aim.y;
     this.sphere.position.z = this.position.z + this.aim.z;
+    let index;
+    this.arrows.forEach((arrow, i) => {
+      // arrow.position.add(arrow.velocity)
+      arrow.position.x += arrow.velocity.x * 0.095;
+      arrow.position.y += arrow.velocity.y * 0.095;
+      arrow.position.z += arrow.velocity.z * 0.095;
+
+      if (
+        Math.abs(arrow.position.x) >= MAXRANGE ||
+        Math.abs(arrow.position.y) >= MAXRANGE ||
+        Math.abs(arrow.position.z) >= MAXRANGE
+      ) {
+        index = i;
+      }
+    });
+
+    if (index !== undefined) {
+      this.scene.remove(this.arrows[index]);
+      this.arrows.splice(index, 1);
+    }
     this.renderer.render(this.scene, this.camera);
   };
 
-  createCrosshair() {
-    // crosshair size
-    let x = 0.05,
-      y = 0.05;
-
-    let geometry = new THREE.Geometry();
-    let material = new THREE.LineBasicMaterial({
-      color: 0xaaffaa
-    });
-
-    // crosshair
-    geometry.vertices.push(new THREE.Vector3(0, y, 0));
-    geometry.vertices.push(new THREE.Vector3(0, -y, 0));
-    geometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    geometry.vertices.push(new THREE.Vector3(x, 0, 0));
-    geometry.vertices.push(new THREE.Vector3(-x, 0, 0));
-
-    this.crosshair = new THREE.Line(geometry, material);
-    this.camera.add(this.crosshair);
-    this.scene.add(this.camera);
-  }
 
   showPosition = () => {
-    const geometry = new THREE.CylinderGeometry(.05, .05, 1)
-    const material = new THREE.MeshPhongMaterial({ color: 0x00FF00 })
-    const laser = new THREE.Mesh(geometry, material);
-    laser.position.x = this.position.x + this.aim.x
-    laser.rotation.x = this.aim.x + Math.PI/2 
-    laser.position.y = this.position.y + this.aim.y
-    laser.rotation.y = this.aim.y
-    laser.position.z = this.position.z + this.aim.z
-    this.scene.add(laser)
-    
+
+
+    var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
+    dir.normalize();
+
+    var origin = new THREE.Vector3(
+      this.position.x,
+      this.position.y,
+      this.position.z
+    );
+    var length = 0.5;
+    var hex = 0x00ff00;
+    var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, 1, 0.05);
+    arrowHelper.velocity = new THREE.Vector3(
+      this.aim.x,
+      this.aim.y,
+      this.aim.z
+    );
+
+    this.arrows.push(arrowHelper);
+    this.scene.add(arrowHelper);
+    // console.log(arrowHelper.rotation.z)
+
     this.props.navigation.state.params.socket.emit('position', {
       position: this.position,
       aim: this.aim
