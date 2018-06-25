@@ -79,26 +79,25 @@ export default class App extends React.Component {
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
     this.createCrosshair();
 
-    //CUBE
+    //sphere
     // Simple color material
     // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
-    // const geometry = new THREE.CircleGeometry(0.01, 0.01);
-    // const material = new THREE.MeshPhongMaterial({
-    //   color: 0xff00ff
-    // });
+    const geometry = new THREE.SphereGeometry( 0.0154);
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000});
 
     // Combine our geometry and material
-    // this.cube = new THREE.Mesh(geometry, material);
-    // this.cube.position.z = -1;
-    // this.cube.position.x = this.camera.position.x;
-    // this.cube.position.y = this.camera.position.y;
-    // Add the cube to the scene
+    this.sphere = new THREE.Mesh(geometry, material);
+    this.sphere.position.z = -1;
+    this.sphere.position.x = this.camera.position.x;
+    this.sphere.position.y = this.camera.position.y;
+    // Add the sphere to the scene
     //=======================================================================
 
-    // Setup a light so we can see the cube color
+    // Setup a light so we can see the sphere color
     // AmbientLight colors all things in the scene equally.
     this.scene.add(new THREE.AmbientLight(0xffffff));
-    this.scene.add(this.crosshair);
+
+    this.scene.add(this.sphere);
   };
 
   // When the phone rotates, or the view changes size, this method will be called.
@@ -118,10 +117,9 @@ export default class App extends React.Component {
     // Finally render the scene with the AR Camera
     this.camera.getWorldPosition(this.position);
     this.camera.getWorldDirection(this.aim);
-    this.crosshair.position.x = this.position.x + this.aim.x;
-    this.crosshair.position.y = this.position.y + this.aim.y;
-    this.crosshair.position.z = this.position.z + this.aim.z;
-
+    this.sphere.position.x = this.position.x + this.aim.x;
+    this.sphere.position.y = this.position.y + this.aim.y;
+    this.sphere.position.z = this.position.z + this.aim.z;
     this.renderer.render(this.scene, this.camera);
   };
 
@@ -148,6 +146,7 @@ export default class App extends React.Component {
   }
 
   showPosition = () => {
+    
     this.props.navigation.state.params.socket.emit('position', {
       position: this.position,
       aim: this.aim
