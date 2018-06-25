@@ -23,7 +23,7 @@ export default class Home extends Component {
 
   handleCreateRooms() {
     const { navigate } = this.props.navigation;
-    navigate('Rooms', { socket: this.socket });
+    navigate('ARScene', { socket: this.socket });
   }
   render() {
     return (
