@@ -121,44 +121,15 @@ export default class App extends React.Component {
   };
 
   showPosition = () => {
-    // Assuming player2 is at position (1, -1), (x, z)
-    // Player one facing negative z axis.
-    // flip z axis sign for player facing positive z axis.
-    // player2x - player1x
-    // let x = 1 - position.x;
-    // // player1z - player2z
-    // let z = position.z + 1;
-    // // angle needed to hit.
-    // let thetaNeeded = Math.atan(x / z);
-    // // actual viewing angle.
-    // let theta = Math.atan(aim.x / aim.z); // positive if on other side of z axis.
-    // if (aim.z < 0) theta *= -1;
-    // console.log('theta needed: ', THREE.Math.radToDeg(thetaNeeded));
-    // console.log('current theta: ', THREE.Math.radToDeg(theta));
-    // // pythagorean thm.
-    // let magnitude = Math.sqrt(
-    //   Math.pow(1 - position.x, 2) + Math.pow(position.z + 1, 2)
-    // );
-    // // xsin(theta)
-    // let vx = Math.sin(theta) * magnitude;
-    // // zcos(theta)
-    // let vz = Math.cos(theta) * magnitude; // positive if on other side of z axis.
-    // if (aim.z < 0) vz *= -1;
-    // // given theta and origin => destination.
-    // const destination = {
-    //   x: position.x + vx,
-    //   z: position.z + vz
-    // };
-    // console.log(`destination: (${destination.x}, ${destination.z})`);
-    // // let bufferTheta = Math.abs(theta - thetaNeeded);
-    // let bufferX = Math.abs(1 - destination.x);
-    // let bufferZ = Math.abs(destination.z + 1);
-    // // console.log('bufferTheta: ', bufferTheta);
-    // console.log('bufferX: ', bufferX);
-    // console.log('bufferZ: ', bufferZ);
-    // if (/*bufferTheta < 0.1 && */ bufferX < 0.05 && bufferZ < 0.05)
-    //   console.log('HIT!!!!');
-    // else console.log('miss....');
+    const geometry = new THREE.CylinderGeometry(.05, .05, 1)
+    const material = new THREE.MeshPhongMaterial({ color: 0x00FF00 })
+    const laser = new THREE.Mesh(geometry, material);
+    laser.position.x = this.position.x + this.aim.x
+    laser.rotation.x = this.aim.x + Math.PI/2 
+    laser.position.y = this.position.y + this.aim.y
+    laser.rotation.y = this.aim.y
+    laser.position.z = this.position.z + this.aim.z
+    this.scene.add(laser)
     this.props.navigation.state.params.socket.emit('position', {
       position: this.position,
       aim: this.aim
