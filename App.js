@@ -15,7 +15,7 @@ export default class App extends React.Component {
     this.state = {
       fontLoaded: false
     };
-  }
+  } 
   async componentDidMount() {
     await Font.loadAsync({
       Orbitron: require('./assets/fonts/Orbitron/Orbitron-Regular.ttf'),

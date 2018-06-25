@@ -1,58 +1,119 @@
-import React from 'react';
-import { Text, View, FlatList} from 'react-native';
+import React, { Component } from 'react';
+import {
+  Container,
+  Button,
+  Icon,
+  Content,
+  List,
+  ListItem,
+  Left,
+  Body,
+  Right,
+  Thumbnail,
+  Text
+} from 'native-base';
+import { SERVER_URL } from 'react-native-dotenv';
+import io from 'socket.io-client';
 import axios from 'axios';
-const host = 'http://172.16.25.175:3030';
+const host = SERVER_URL;
 
-class AllRooms extends React.Component {
-  constructor() {
-    super();
+class Home extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      rooms: {}
+      rooms: {
+        chicken: 1,
+        Rooster: 2,
+        cow: 3,
+        David: 0,
+        giraffe: 10,
+        lion: 5,
+        cat: 200
+      },
+      loading: false
     };
+    this.socket = io(host);
   }
-  componentDidMount() {
-    axios
-      .get(`${host}/rooms`)
-      .then(res => res.data)
-      .then(rooms => this.setState({ rooms }));
-  }
+
+  // componentDidMount() {
+  //   this.getRooms();
+  // }
+
+  // getRooms = () => {
+  //   const url = `${host}/rooms`;
+  //   this.setState({ loading: true });
+  //   axios
+  //     .get(url)
+  //     .then(res => res.data)
+  //     .then(res => {
+  //       this.setState({
+  //         rooms: res,
+  //         loading: false
+  //       });
+  //     })
+  //     .catch(error => {
+  //       this.setState({ error, loading: false });
+  //     });
+  // };
 
   render() {
-    let { rooms } = this.state;
-    console.log(rooms);
-
+    let rooms = Object.keys(this.state.rooms);
+    let { navigate } = this.props.navigation;
     return (
-      <View style={styles.main}>
-        {rooms &&
-          Object.keys(rooms).map(room => (
-            <Text key={room}>
-              {room} {rooms[room]}
-            </Text>
-          ))}
-      </View>
+      <Container style={{ backgroundColor: '#3D464E' }}>
+        <Button transparent onPress={() => this.props.navigation.goBack()}>
+          <Icon style={styles.backButton} name="arrow-back" />
+        </Button>
+        <Content>
+          <Text style={styles.title}>All Rooms</Text>
+
+          <List>
+            {rooms &&
+              rooms.map(room => {
+                return (
+                  <ListItem
+                    avatar
+                    key={room}
+                    onPress={() =>
+                      navigate('ARScene', { socket: this.socket })
+                    }>
+                    <Left>
+                      <Thumbnail
+                        source={{
+                          uri:
+                            'http://freedesignfile.com/upload/2017/08/alien-icon-vector.png'
+                        }}
+                      />
+                    </Left>
+                    <Body>
+                      <Text>{room}</Text>
+                      <Text note>Stuff goes here.</Text>
+                    </Body>
+                    <Right>
+                      <Text note>
+                        {this.state.rooms[room]} player(s) active.
+                      </Text>
+                    </Right>
+                  </ListItem>
+                );
+              })}
+          </List>
+        </Content>
+      </Container>
     );
   }
 }
 
-export default AllRooms;
+export default Home;
 
 const styles = {
-  main: {
-    backgroundColor: '#3D464E',
-    flex: 1
+  backButton: {
+    color: 'black'
   },
   title: {
     fontFamily: 'Orbitron',
     fontSize: 30,
     textAlign: 'center',
     letterSpacing: 2
-  },
-  items: {
-    marginLeft: 20,
-    marginRight: 20
-  },
-  backButton: {
-    marginTop: 10,
-    color: 'black'
   }
 };
