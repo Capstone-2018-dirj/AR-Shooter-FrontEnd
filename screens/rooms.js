@@ -1,28 +1,36 @@
 import React, { Component } from 'react';
-import { Content, Form, Item, Input, Label, Button } from 'native-base';
+import { Content, Form, Item, Input, Label, Button, Icon } from 'native-base';
 import { Text, View } from 'react-native';
 
-export default class FloatingLabelExample extends Component {
+export default class Rooms extends Component {
   constructor() {
     super();
     this.state = {
       name: ''
     };
-
+    this.handleStartGame = this.handleStartGame.bind(this);
     this.createRoom = this.createRoom.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
   createRoom() {
-    this.props.navigation.state.params.socket.on('createRoom', this.state.name);
+    console.log(this.state.name);
+    this.props.navigation.state.params.socket.emit('createRoom', this.state.name);
   }
   handleChange(text) {
     this.setState({ name: text });
+  }
+  handleStartGame() {
+    const { navigate } = this.props.navigation;
+    navigate('ARScene', { socket: this.props.navigation.state.params.socket });
   }
 
   render() {
     return (
       <View style={styles.main}>
+        <Button transparent onPress={() => this.props.navigation.goBack()}>
+          <Icon style={styles.backButton} name="arrow-back" />
+        </Button>
         <Content style={styles.items}>
           <Text style={styles.title}>LOBBY </Text>
           <Form>
@@ -38,6 +46,13 @@ export default class FloatingLabelExample extends Component {
               <Text style={{ letterSpacing: 2 }}>Create a Room</Text>
             </Button>
           </Form>
+          <Button
+            onPress={this.handleStartGame}
+            style={{ marginTop: 40 }}
+            full
+            light>
+            <Text style={{ letterSpacing: 2 }}>Start Game</Text>
+          </Button>
         </Content>
       </View>
     );
@@ -54,11 +69,14 @@ const styles = {
     fontFamily: 'Orbitron',
     fontSize: 30,
     textAlign: 'center',
-    marginTop: 60,
     letterSpacing: 2
   },
   items: {
     marginLeft: 20,
     marginRight: 20
+  },
+  backButton: {
+    marginTop: 10,
+    color: 'black'
   }
 };

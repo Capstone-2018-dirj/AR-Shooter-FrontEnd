@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
+import { SERVER_URL } from 'react-native-dotenv';
 import {
   Container,
   Header,
@@ -11,13 +12,13 @@ import {
   Button
 } from 'native-base';
 import { Text, View } from 'react-native';
-const host = 'http://172.16.25.211:3030';
+const host = SERVER_URL;
 
 export default class FloatingLabelExample extends Component {
   constructor() {
     super();
     this.socket = io(host);
-    this.handlePress = this.handlePress.bind(this);
+    this.handleCreateRooms = this.handleCreateRooms.bind(this);
   }
 
   handlePress() {
@@ -36,9 +37,6 @@ export default class FloatingLabelExample extends Component {
             </Item>
           </Form>
         </Content>
-        <Button onPress={this.handlePress} style={{ marginTop: 40 }} full light>
-          <Text style={{ letterSpacing: 2 }}>Start Game</Text>
-        </Button>
       </View>
     );
   }
