@@ -17,21 +17,12 @@ export default class FloatingLabelExample extends Component {
   constructor() {
     super();
     this.socket = io(host);
-    this.handleStartGame = this.handleStartGame.bind(this);
-    this.handleCreateRooms = this.handleCreateRooms.bind(this);
-  }
-  componentDidMount() {
-    this.socket.emit('createRoom', "David's room");
-    console.log('rooms', this.socket.rooms);
-  }
-  handleStartGame() {
-    const { navigate } = this.props.navigation;
-    navigate('ARScene', { socket: this.socket });
+    this.handlePress = this.handlePress.bind(this);
   }
 
-  handleCreateRooms() {
+  handlePress() {
     const { navigate } = this.props.navigation;
-    navigate('Rooms', { socket: this.socket });
+    navigate('ARScene', { socket: this.socket });
   }
   render() {
     return (
@@ -43,20 +34,9 @@ export default class FloatingLabelExample extends Component {
               <Label>Name</Label>
               <Input />
             </Item>
-            <Button
-              onPress={this.handleCreateRooms}
-              style={{ marginTop: 40 }}
-              full
-              light>
-              <Text style={{ letterSpacing: 2 }}>Join/Create a Room</Text>
-            </Button>
           </Form>
         </Content>
-        <Button
-          onPress={this.handleStartGame}
-          style={{ marginTop: 40 }}
-          full
-          light>
+        <Button onPress={this.handlePress} style={{ marginTop: 40 }} full light>
           <Text style={{ letterSpacing: 2 }}>Start Game</Text>
         </Button>
       </View>
