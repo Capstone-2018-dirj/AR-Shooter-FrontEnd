@@ -11,6 +11,8 @@ import {
 } from 'native-base';
 import { Text, View } from 'react-native';
 
+const CREATE_ROOM = 'CREATE_ROOM';
+
 export default class Rooms extends Component {
   constructor() {
     super();
@@ -26,7 +28,7 @@ export default class Rooms extends Component {
   createRoom() {
     if (this.state.name) {
       this.props.navigation.state.params.socket.emit(
-        'createRoom',
+        CREATE_ROOM,
         this.state.name
       );
       Toast.show({
