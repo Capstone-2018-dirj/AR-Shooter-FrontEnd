@@ -17,7 +17,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 const host = SERVER_URL;
 
-class Home extends Component {
+export default class AllRooms extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,9 +64,8 @@ class Home extends Component {
                   <ListItem
                     avatar
                     key={room}
-                    onPress={() =>
-                      navigate('ARScene', { socket: this.socket })
-                    }>
+                    onPress={() => navigate('ARScene', { socket: this.socket })}
+                  >
                     <Left>
                       <Thumbnail
                         source={{
@@ -93,8 +92,6 @@ class Home extends Component {
     );
   }
 }
-
-export default Home;
 
 const styles = {
   backButton: {

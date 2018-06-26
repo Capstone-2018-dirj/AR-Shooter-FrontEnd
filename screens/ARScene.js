@@ -147,10 +147,7 @@ export default class App extends React.Component {
     this.renderer.render(this.scene, this.camera);
   };
 
-
   showPosition = () => {
-
-
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
 
