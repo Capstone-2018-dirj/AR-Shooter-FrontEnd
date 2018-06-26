@@ -17,7 +17,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 const host = SERVER_URL;
 
-export default class AllRooms extends Component {
+ class AllRooms extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -92,6 +92,8 @@ export default class AllRooms extends Component {
     );
   }
 }
+
+export default AllRooms;
 
 const styles = {
   backButton: {
