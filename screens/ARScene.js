@@ -12,6 +12,11 @@ import { View as GraphicsView } from 'expo-graphics';
 
 const MAXRANGE = 5;
 
+// socket events
+const SHOT = 'SHOT';
+const IS_HIT = 'IS_HIT';
+const SHOOT = 'SHOOT';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -24,10 +29,10 @@ export default class App extends React.Component {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings();
-    this.props.navigation.state.params.socket.on('shot', payload => {
+    this.props.navigation.state.params.socket.on(SHOT, payload => {
       console.log("shooter's position", payload.x, payload.y);
       console.log('our position', this.position.x, this.position.y);
-      this.props.navigation.state.params.socket.emit('gothit?', this.position);
+      this.props.navigation.state.params.socket.emit(IS_HIT, this.position);
     });
   }
 
@@ -172,7 +177,7 @@ export default class App extends React.Component {
     this.scene.add(arrowHelper);
     // console.log(arrowHelper.rotation.z)
 
-    this.props.navigation.state.params.socket.emit('position', {
+    this.props.navigation.state.params.socket.emit(SHOOT, {
       position: this.position,
       aim: this.aim
     });
