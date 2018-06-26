@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-import Home from './screens/home';
+import Home from './screens/Home';
 import ARScene from './screens/ARScene';
-import GameOver from './screens/gameOver';
-import Rooms from './screens/rooms';
-import AllRooms from './screens/allRooms';
+import GameOver from './screens/GameOver';
+import Rooms from './screens/Rooms';
+import AllRooms from './screens/AllRooms';
 import { Font, AppLoading } from 'expo';
 import { Root } from 'native-base';
 
