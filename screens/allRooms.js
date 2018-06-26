@@ -32,7 +32,7 @@ class Home extends Component {
       },
       loading: false
     };
-    this.socket = io(host);
+    this.socket = this.props.navigation.state.params.socket;
   }
 
   // componentDidMount() {
