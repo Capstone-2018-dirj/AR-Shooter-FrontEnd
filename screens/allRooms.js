@@ -21,41 +21,31 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rooms: {
-        chicken: 1,
-        Rooster: 2,
-        cow: 3,
-        David: 0,
-        giraffe: 10,
-        lion: 5,
-        cat: 200
-      },
+      rooms: {},
       loading: false
     };
-    this.socket = io(host);
+    this.socket = this.props.navigation.state.params.socket;
   }
 
-  // componentDidMount() {
-  //   this.getRooms();
-  // }
-
-  // getRooms = () => {
-  //   const url = `${host}/rooms`;
-  //   this.setState({ loading: true });
-  //   axios
-  //     .get(url)
-  //     .then(res => res.data)
-  //     .then(res => {
-  //       this.setState({
-  //         rooms: res,
-  //         loading: false
-  //       });
-  //     })
-  //     .catch(error => {
-  //       this.setState({ error, loading: false });
-  //     });
-  // };
-
+  componentDidMount() {
+    this.getRooms();
+  }
+  getRooms = () => {
+    const url = `${host}/rooms`;
+    this.setState({ loading: true });
+    axios
+      .get(url)
+      .then(res => res.data)
+      .then(res => {
+        this.setState({
+          rooms: res,
+          loading: false
+        });
+      })
+      .catch(error => {
+        this.setState({ error, loading: false });
+      });
+  };
   render() {
     let rooms = Object.keys(this.state.rooms);
     let { navigate } = this.props.navigation;
