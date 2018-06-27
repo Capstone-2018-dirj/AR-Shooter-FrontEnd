@@ -31,8 +31,6 @@ export default class App extends React.Component {
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
     this.props.navigation.state.params.socket.on(SHOT, payload => {
-      console.log("shooter's position", payload.x, payload.y);
-      console.log('our position', this.position.x, this.position.y);
       this.props.navigation.state.params.socket.emit(IS_HIT, this.position);
     });
 
@@ -97,8 +95,6 @@ export default class App extends React.Component {
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
 
     //sphere
-    // Simple color material
-    // Make a cube - notice that each unit is 1 meter in real life, we will make our box 0.1 meters
     const geometry = new THREE.SphereGeometry(0.0154);
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
@@ -180,7 +176,6 @@ export default class App extends React.Component {
 
     this.arrows.push(arrowHelper);
     this.scene.add(arrowHelper);
-    // console.log(arrowHelper.rotation.z)
 
     this.props.navigation.state.params.socket.emit(SHOOT, {
       position: this.position,
