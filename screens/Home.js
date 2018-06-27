@@ -39,7 +39,8 @@ export default class Home extends Component {
               onPress={this.handleCreateRooms}
               style={{ marginTop: 40 }}
               full
-              light>
+              light
+            >
               <Text style={{ letterSpacing: 2 }}>Join/Create a Room</Text>
             </Button>
           </Form>

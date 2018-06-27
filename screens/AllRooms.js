@@ -17,7 +17,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 const host = SERVER_URL;
 
- class AllRooms extends Component {
+class AllRooms extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -80,7 +80,7 @@ const host = SERVER_URL;
                     </Body>
                     <Right>
                       <Text note>
-                        {this.state.rooms[room]} player(s) active.
+                        {this.state.rooms[room].length} player(s) active.
                       </Text>
                     </Right>
                   </ListItem>
