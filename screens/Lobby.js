@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import io from 'socket.io-client';
-import { SERVER_URL } from 'react-native-dotenv';
 import { Content, Button, Icon } from 'native-base';
 import { Text, View } from 'react-native';
+import socket from '../socket'
 
 const START_GAME = 'START_GAME';
 const GAME_STARTED = 'GAME_STARTED';
-const host = SERVER_URL;
 
 export default class Lobby extends Component {
   constructor() {
@@ -14,19 +12,16 @@ export default class Lobby extends Component {
     this.startGame = this.startGame.bind(this);
   }
   componentDidMount() {
-    let socket = this.props.navigation.state.params.socket;
     let { navigate } = this.props.navigation;
     socket.on(GAME_STARTED, () => {
-      navigate('ARScene', { socket: socket });
+      navigate('ARScene');
     });
   }
   startGame() {
-    let socket = this.props.navigation.state.params.socket;
     socket.emit(START_GAME);
   }
   render() {
-    let { navigate } = this.props.navigation;
-    let socket = this.props.navigation.state.params.socket;
+
     return (
       <View style={styles.main}>
         <Button transparent onPress={() => this.props.navigation.goBack()}>

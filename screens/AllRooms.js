@@ -3,9 +3,9 @@ import { Form, Item, Input, Label, Button, Icon, Toast } from 'native-base';
 import { Text, View } from 'react-native';
 import ListRooms from '../components/listRooms';
 const CREATE_ROOM = 'CREATE_ROOM';
-import { SERVER_URL } from 'react-native-dotenv';
-const host = SERVER_URL;
 import axios from 'axios';
+import socket, { host } from '../socket';
+
 export default class Rooms extends Component {
   constructor() {
     super();
@@ -43,10 +43,7 @@ export default class Rooms extends Component {
 
   createRoom() {
     if (this.state.name) {
-      this.props.navigation.state.params.socket.emit(
-        CREATE_ROOM,
-        this.state.name
-      );
+      socket.emit(CREATE_ROOM, this.state.name);
       Toast.show({
         text: 'Room Created!',
         position: 'top',
@@ -63,7 +60,6 @@ export default class Rooms extends Component {
     this.setState({ name: text });
   }
   render() {
-    let socket = this.props.navigation.state.params.socket;
     let navigate = this.props.navigation.navigate;
     return (
       <View style={styles.main}>
@@ -87,11 +83,7 @@ export default class Rooms extends Component {
           </Form>
         </View>
         <Text style={styles.smallTitle}>All Rooms</Text>
-        <ListRooms
-          rooms={this.state.rooms}
-          socket={socket}
-          navigate={navigate}
-        />
+        <ListRooms rooms={this.state.rooms} navigate={navigate} />
       </View>
     );
   }

@@ -13,7 +13,7 @@ import {
 
 const ListRooms = props => {
   let rooms = props.rooms;
-  let socket = props.socket;
+
   rooms = Object.keys(rooms);
   return (
     <Content style={{ marginLeft: 20, marginRight: 20 }}>
@@ -25,7 +25,7 @@ const ListRooms = props => {
                 <ListItem
                   avatar
                   key={room}
-                  onPress={() => props.navigate('Lobby', { socket: socket })}>
+                  onPress={() => props.navigate('Lobby')}>
                   <Left>
                     <Thumbnail
                       source={{

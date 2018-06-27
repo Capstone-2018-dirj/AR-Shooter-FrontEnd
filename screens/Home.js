@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
-import io from 'socket.io-client';
-import { SERVER_URL } from 'react-native-dotenv';
+
 import { Content, Form, Item, Input, Label, Button } from 'native-base';
 import { Text, View } from 'react-native';
-const host = SERVER_URL;
 
 export default class Home extends Component {
   constructor() {
     super();
-    this.socket = io(host);
     this.handleAddRoomsScreen = this.handleAddRoomsScreen.bind(this);
   }
 
   handleAddRoomsScreen() {
     const { navigate } = this.props.navigation;
-    navigate('AllRooms', { socket: this.socket });
+    navigate('AllRooms');
   }
   render() {
     return (

@@ -9,6 +9,7 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 // it also provides debug information with `isArCameraStateEnabled`
 import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
+import socket from '../socket';
 
 const MAXRANGE = 5;
 
@@ -34,12 +35,12 @@ export default class App extends React.Component {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
-    this.props.navigation.state.params.socket.on(SHOT, payload => {
-      this.props.navigation.state.params.socket.emit(IS_HIT, this.position);
+    socket.on(SHOT, payload => {
+      socket.emit(IS_HIT, this.position);
     });
 
     this.interval = setInterval(() => {
-      this.props.navigation.state.params.socket.emit(UPDATE_PLAYER_MOVEMENT, {
+      socket.emit(UPDATE_PLAYER_MOVEMENT, {
         position: this.position,
         aim: this.aim
       });
@@ -64,8 +65,7 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.hasShot}
-      >
+        disabled={this.state.hasShot}>
         <GraphicsView
           style={{
             flex: 5
@@ -168,7 +168,7 @@ export default class App extends React.Component {
   };
 
   showPosition = () => {
-    this.setState({ hasShot: true });
+    // this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
 
@@ -189,11 +189,11 @@ export default class App extends React.Component {
     this.arrows.push(arrowHelper);
     this.scene.add(arrowHelper);
 
-    this.props.navigation.state.params.socket.emit(SHOOT, {
+    socket.emit(SHOOT, {
       position: this.position,
       aim: this.aim
     });
 
-    this.cooldown();
+    // this.cooldown();
   };
 }
