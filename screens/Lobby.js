@@ -4,9 +4,26 @@ import { SERVER_URL } from 'react-native-dotenv';
 import { Content, Button, Icon } from 'native-base';
 import { Text, View } from 'react-native';
 
+const START_GAME = 'START_GAME';
+const GAME_STARTED = 'GAME_STARTED';
 const host = SERVER_URL;
 
-export default class Home extends Component {
+export default class Lobby extends Component {
+  constructor() {
+    super();
+    this.startGame = this.startGame.bind(this);
+  }
+  componentDidMount() {
+    let socket = this.props.navigation.state.params.socket;
+    let { navigate } = this.props.navigation;
+    socket.on(GAME_STARTED, () => {
+      navigate('ARScene', { socket: socket });
+    });
+  }
+  startGame() {
+    let socket = this.props.navigation.state.params.socket;
+    socket.emit(START_GAME);
+  }
   render() {
     let { navigate } = this.props.navigation;
     let socket = this.props.navigation.state.params.socket;
@@ -17,11 +34,7 @@ export default class Home extends Component {
         </Button>
         <Content style={styles.items}>
           <Text style={styles.title}>Lobby</Text>
-          <Button
-            onPress={() => navigate('ARScene', { socket: socket })}
-            style={{ marginTop: 40 }}
-            full
-            light>
+          <Button onPress={this.startGame} style={{ marginTop: 40 }} full light>
             <Text style={{ letterSpacing: 2 }}>Start Game</Text>
           </Button>
         </Content>
