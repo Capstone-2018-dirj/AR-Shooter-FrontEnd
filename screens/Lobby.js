@@ -3,7 +3,6 @@ import { Content, Button, Icon } from 'native-base';
 import { Text, View } from 'react-native';
 import socket from '../socket';
 import styles from '../styles/globals';
-import backButton from '../styles/backButton';
 
 const START_GAME = 'START_GAME';
 const GAME_STARTED = 'GAME_STARTED';
@@ -27,7 +26,7 @@ export default class Lobby extends Component {
     return (
       <View style={styles.main}>
         <Button transparent onPress={() => this.props.navigation.goBack()}>
-          <Icon style={backButton} name="arrow-back" />
+          <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <Content style={styles.items}>
           <Text style={styles.title}>Lobby</Text>

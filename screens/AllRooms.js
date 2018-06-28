@@ -4,9 +4,7 @@ import { Text, View } from 'react-native';
 import ListRooms from '../components/listRooms';
 const CREATE_ROOM = 'CREATE_ROOM';
 import axios from 'axios';
-import backButton from '../styles/backButton';
 import styles from '../styles/globals';
-import smallTitle from '../styles/smallTitle';
 import socket, { host } from '../socket';
 
 export default class Rooms extends Component {
@@ -65,7 +63,7 @@ export default class Rooms extends Component {
     return (
       <View style={styles.main}>
         <Button transparent onPress={() => this.props.navigation.goBack()}>
-          <Icon style={backButton} name="arrow-back" />
+          <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <View style={styles.items}>
           <Text style={styles.title}>AR SHOOTER</Text>
@@ -83,7 +81,7 @@ export default class Rooms extends Component {
             </Button>
           </Form>
         </View>
-        <Text style={smallTitle}>All Rooms</Text>
+        <Text style={styles.smallTitle}>All Rooms</Text>
         <ListRooms rooms={this.state.rooms} navigate={navigate} />
       </View>
     );

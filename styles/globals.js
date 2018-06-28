@@ -1,6 +1,6 @@
 const styles = {
   main: {
-    backgroundColor:  '#D5DBE3',
+    backgroundColor: '#D5DBE3',
     flex: 1,
     alignContent: 'center'
   },
@@ -14,6 +14,18 @@ const styles = {
   items: {
     marginLeft: 20,
     marginRight: 20
+  },
+  smallTitle: {
+    fontFamily: 'Orbitron',
+    fontSize: 25,
+    marginBottom: 0,
+    textAlign: 'center',
+    letterSpacing: 2,
+    marginTop: 30
+  },
+  backButton: {
+    marginTop: 10,
+    color: 'black'
   }
 };
 

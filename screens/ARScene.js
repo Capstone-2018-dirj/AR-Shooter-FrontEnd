@@ -204,12 +204,3 @@ export default class App extends React.Component {
     // this.cooldown();
   };
 }
-
-const styles = {
-  modal: {
-    flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center'
-  }
-};
