@@ -1,7 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, Text, View, Camera } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { AR } from 'expo';
-import CountdownCircle from 'react-native-countdown-circle';
 
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';

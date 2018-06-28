@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from '../styles/globals';
-import { Content, Form, Item, Input, Label, Button } from 'native-base';
+import { Form, Item, Input, Label, Button } from 'native-base';
 import { Text, View, Image } from 'react-native';
 
 export default class Home extends Component {
