@@ -13,6 +13,7 @@ import {
 import styles from '../styles/globals';
 import axios from 'axios';
 const JOIN_ROOM = 'JOIN_ROOM';
+const UPDATE_ROOMS = 'UPDATE_ROOMS'
 import socket, { host } from '../socket';
 
 class ListRooms extends React.Component {
@@ -28,7 +29,7 @@ class ListRooms extends React.Component {
 
   componentDidMount() {
     this.getRooms();
-    socket.on('NEW_ROOM', rooms => {
+    socket.on(UPDATE_ROOMS, rooms => {
       this.receivingRooms(rooms);
     });
   }
