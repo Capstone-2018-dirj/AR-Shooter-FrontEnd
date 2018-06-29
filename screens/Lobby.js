@@ -40,7 +40,7 @@ export default class Lobby extends Component {
   render() {
     return (
       <View style={styles.main}>
-        <Button transparent onPress={() => this.props.navigation.goBack()}>
+        <Button transparent onPress={this.handleLeaveRoom}>
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <Content style={styles.items}>
