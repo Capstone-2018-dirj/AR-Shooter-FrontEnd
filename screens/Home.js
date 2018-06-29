@@ -29,7 +29,7 @@ export default class Home extends Component {
           <Form>
             <Item floatingLabel autofocus="true">
               <Label>Player Name</Label>
-              <Input />
+              <Input style={{ paddingRight: 0 }} />
             </Item>
             <Button
               bordered

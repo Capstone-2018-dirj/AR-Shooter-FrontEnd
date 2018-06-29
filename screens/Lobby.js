@@ -40,14 +40,14 @@ export default class Lobby extends Component {
   render() {
     return (
       <View style={styles.main}>
-        <Button transparent onPress={this.handleLeaveRoom}>
+        <Button
+          style={styles.backButtonContainer}
+          transparent
+          onPress={this.handleLeaveRoom}>
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <Content style={styles.items}>
           <Text style={styles.title}>Lobby</Text>
-          {/*<Button onPress={this.startGame} style={{ marginTop: 40 }} full light>
-            <Text style={{ letterSpacing: 2 }}>Start Game</Text>
-    </Button>*/}
           <Button
             bordered
             dark
