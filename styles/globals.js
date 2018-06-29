@@ -5,7 +5,7 @@ const styles = {
     alignContent: 'center'
   },
   mainTitle: {
-    marginTop: 90,
+    marginTop: 60,
     fontFamily: 'Orbitron',
     fontSize: 30,
     textAlign: 'center',
