@@ -7,6 +7,10 @@ import BgAudio from 'react-native-background-audio';
 export default class Home extends Component {
   constructor() {
     super();
+    this.state = {
+      playerName: ''
+    };
+    this.nameChangeHandler = this.nameChangeHandler.bind(this);
     this.handleAddRoomsScreen = this.handleAddRoomsScreen.bind(this);
   }
 
@@ -14,6 +18,11 @@ export default class Home extends Component {
     const { navigate } = this.props.navigation;
     navigate('AllRooms');
   }
+  nameChangeHandler(evt) {
+    this.setState({ playerName: evt.target.value });
+    console.log(this.state.playerName);
+  }
+
   render() {
     return (
       <View style={styles.main}>
@@ -29,14 +38,18 @@ export default class Home extends Component {
           <Form>
             <Item floatingLabel autofocus="true">
               <Label>Player Name</Label>
-              <Input style={{ paddingRight: 0 }} />
+              <Input
+                style={{ paddingRight: 0 }}
+                value={this.state.playerName}
+              />
             </Item>
             <Button
               bordered
               dark
               onPress={this.handleAddRoomsScreen}
               style={{ marginTop: 40 }}
-              full>
+              full
+            >
               <Text style={{ letterSpacing: 2 }}>Join/Create a Room</Text>
             </Button>
           </Form>
