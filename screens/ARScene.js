@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, Vibration } from 'react-native';
 import { AR } from 'expo';
 import * as Progress from 'react-native-progress';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
@@ -38,7 +38,8 @@ export default class App extends React.Component {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
-    socket.on(SHOT, () => {
+    socket.on(SHOT,  () => {
+      Vibration.vibrate(1000);
       console.log('HEALTH BEFORE>>>>', this.state.health);
       this.setState(prevState => ({ health: prevState.health - 1 }));
       console.log('HEALTH NOW>>>', this.state.health);
@@ -73,8 +74,7 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}
-      >
+        disabled={this.state.gameDisabled || this.state.hasShot}>
         (
         <GraphicsView
           style={{
