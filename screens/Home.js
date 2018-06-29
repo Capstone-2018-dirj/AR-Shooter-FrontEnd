@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from '../styles/globals';
 import { Form, Item, Input, Label, Button } from 'native-base';
 import { Text, View, Image } from 'react-native';
+import BgAudio from 'react-native-background-audio';
 
 export default class Home extends Component {
   constructor() {
@@ -16,6 +17,7 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.main}>
+        <BgAudio options={audio_options} />
         <Text style={styles.mainTitle}>SPACE COWBOY </Text>
         <View style={styles.items}>
           <View style={{ alignSelf: 'center', margin: 0 }}>
@@ -43,3 +45,7 @@ export default class Home extends Component {
     );
   }
 }
+
+const audio_options = {
+  source: { local: require('../assets/audio/No_Surprises_8-bit_.mp3') } //ex. require('./music/sample.mp3')
+};
