@@ -48,7 +48,12 @@ export default class Rooms extends Component {
               <Label>Room Name</Label>
               <Input value={this.state.name} onChangeText={this.handleChange} />
             </Item>
-            <Button onPress={this.createRoom} style={{ marginTop: 40 }} full>
+            <Button
+              bordered
+              dark
+              onPress={this.createRoom}
+              style={{ marginTop: 40 }}
+              full>
               <Text style={{ letterSpacing: 2 }}>Create Room</Text>
             </Button>
           </Form>
