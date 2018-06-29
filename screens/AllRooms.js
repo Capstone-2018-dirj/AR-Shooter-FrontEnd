@@ -22,7 +22,7 @@ export default class Rooms extends Component {
     let navigate = this.props.navigation.navigate;
     if (this.state.name) {
       socket.emit(CREATE_ROOM, this.state.name);
-
+      this.setState({ name: '' });
       navigate('Lobby', { room: this.state.name });
     } else {
       Toast.show({

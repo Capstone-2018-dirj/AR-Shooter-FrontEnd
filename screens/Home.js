@@ -17,7 +17,7 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.main}>
-        {/*<BgAudio options={audio_options} />*/}
+        {/* <BgAudio options={audio_options} />*/}
         <Text style={styles.mainTitle}>SPACE COWBOY </Text>
         <View style={styles.items}>
           <View style={{ alignSelf: 'center', margin: 0 }}>
