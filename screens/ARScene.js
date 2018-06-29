@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View, Vibration } from 'react-native';
+import { TouchableOpacity, Vibration } from 'react-native';
 import { AR } from 'expo';
 import * as Progress from 'react-native-progress';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
@@ -15,7 +15,6 @@ const MAXRANGE = 5;
 
 // socket events
 const SHOT = 'SHOT';
-const IS_HIT = 'IS_HIT';
 const SHOOT = 'SHOOT';
 const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
 
@@ -38,11 +37,9 @@ export default class App extends React.Component {
     // Turn off extra warnings
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
-    socket.on(SHOT,  () => {
+    socket.on(SHOT, () => {
       Vibration.vibrate(1000);
-      console.log('HEALTH BEFORE>>>>', this.state.health);
       this.setState(prevState => ({ health: prevState.health - 1 }));
-      console.log('HEALTH NOW>>>', this.state.health);
     });
 
     this.interval = setInterval(() => {
