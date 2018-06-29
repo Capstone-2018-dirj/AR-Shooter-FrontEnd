@@ -16,12 +16,12 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.main}>
-        <Text style={styles.title}>AR SHOOTER </Text>
+        <Text style={styles.mainTitle}>SPACE COWBOY </Text>
         <View style={styles.items}>
           <View style={{ alignSelf: 'center', margin: 0 }}>
             <Image
               style={styles.image}
-              source={require('../assets/icon.png')}
+              source={require('../assets/images/space-cowboy.png')}
             />
           </View>
           <Form>
@@ -30,10 +30,11 @@ export default class Home extends Component {
               <Input />
             </Item>
             <Button
+              bordered
+              dark
               onPress={this.handleAddRoomsScreen}
               style={{ marginTop: 40 }}
-              full
-              light>
+              full>
               <Text style={{ letterSpacing: 2 }}>Join/Create a Room</Text>
             </Button>
           </Form>

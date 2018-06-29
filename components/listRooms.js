@@ -72,7 +72,7 @@ class ListRooms extends React.Component {
                     </Left>
                     <Body>
                       <Text>{room}</Text>
-                      <Text note>Stuff goes here.</Text>
+                      <Text note>Game in session.</Text>
                     </Body>
                     <Right>
                       <Text note>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Content, Button, Icon } from 'native-base';
+import { Content, Button, Icon, Toast } from 'native-base';
 import { Text, View } from 'react-native';
 import socket from '../socket';
 import styles from '../styles/globals';
@@ -11,6 +11,9 @@ const LEAVE_ROOM = 'LEAVE_ROOM';
 export default class Lobby extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showToast: false
+    };
     this.startGame = this.startGame.bind(this);
     this.handleLeaveRoom = this.handleLeaveRoom.bind(this);
   }
@@ -28,12 +31,16 @@ export default class Lobby extends Component {
   handleLeaveRoom() {
     let room = this.props.navigation.state.params.room;
     socket.emit(LEAVE_ROOM, room);
+    Toast.show({
+      text: 'Left Room',
+      buttonText: 'Okay'
+    });
     this.props.navigation.navigate('AllRooms');
   }
   render() {
     return (
       <View style={styles.main}>
-        <Button transparent onPress={this.handleLeaveRoom}>
+        <Button  onPress={this.handleLeaveRoom}>
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <Content style={styles.items}>

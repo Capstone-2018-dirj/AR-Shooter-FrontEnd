@@ -1,8 +1,15 @@
 const styles = {
   main: {
-    backgroundColor: '#D5DBE3',
+    backgroundColor: '#fcf4fa',
     flex: 1,
     alignContent: 'center'
+  },
+  mainTitle: {
+    marginTop: 90,
+    fontFamily: 'Orbitron',
+    fontSize: 30,
+    textAlign: 'center',
+    letterSpacing: 2
   },
   title: {
     fontFamily: 'Orbitron',
@@ -14,6 +21,12 @@ const styles = {
   items: {
     marginLeft: 20,
     marginRight: 20
+  },
+  image: {
+    width: 320,
+    height: 320,
+
+    resizeMode: 'contain'
   },
   smallTitle: {
     fontFamily: 'Orbitron',
