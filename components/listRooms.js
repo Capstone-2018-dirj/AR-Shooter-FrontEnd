@@ -13,7 +13,7 @@ import {
 import styles from '../styles/globals';
 import axios from 'axios';
 const JOIN_ROOM = 'JOIN_ROOM';
-const UPDATE_ROOMS = 'UPDATE_ROOMS'
+const UPDATE_ROOMS = 'UPDATE_ROOMS';
 import socket, { host } from '../socket';
 
 class ListRooms extends React.Component {
@@ -55,14 +55,15 @@ class ListRooms extends React.Component {
       <Content style={{ marginLeft: 20, marginRight: 20 }}>
         <Container style={styles.main}>
           <List style={{ marginTop: 0 }}>
-            {roomsArr &&
+            {roomsArr.length === 0 ? (
+              <Text style={styles.informativeText}> No rooms available. </Text>
+            ) : (
               roomsArr.map(room => {
                 return (
                   <ListItem
                     avatar
                     key={room}
-                    onPress={() => this.handleJoinRoom(room)}
-                  >
+                    onPress={() => this.handleJoinRoom(room)}>
                     <Left>
                       <Thumbnail
                         source={{
@@ -82,7 +83,8 @@ class ListRooms extends React.Component {
                     </Right>
                   </ListItem>
                 );
-              })}
+              })
+            )}
           </List>
         </Container>
       </Content>

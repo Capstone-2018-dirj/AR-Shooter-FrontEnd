@@ -17,7 +17,7 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.main}>
-        <BgAudio options={audio_options} />
+        {/*<BgAudio options={audio_options} />*/}
         <Text style={styles.mainTitle}>SPACE COWBOY </Text>
         <View style={styles.items}>
           <View style={{ alignSelf: 'center', margin: 0 }}>
@@ -29,7 +29,7 @@ export default class Home extends Component {
           <Form>
             <Item floatingLabel autofocus="true">
               <Label>Player Name</Label>
-              <Input />
+              <Input style={{ paddingRight: 0 }} />
             </Item>
             <Button
               bordered

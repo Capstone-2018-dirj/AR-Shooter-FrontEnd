@@ -38,7 +38,7 @@ export default class Rooms extends Component {
     let navigate = this.props.navigation.navigate;
     return (
       <View style={styles.main}>
-        <Button transparent onPress={() => this.props.navigation.goBack()}>
+        <Button style= {styles.backButtonContainer}transparent onPress={() => this.props.navigation.goBack()}>
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <View style={styles.items}>
@@ -46,7 +46,11 @@ export default class Rooms extends Component {
           <Form>
             <Item floatingLabel>
               <Label>Room Name</Label>
-              <Input value={this.state.name} onChangeText={this.handleChange} />
+              <Input
+                style={{ paddingRight: 0 }}
+                value={this.state.name}
+                onChangeText={this.handleChange}
+              />
             </Item>
             <Button
               bordered

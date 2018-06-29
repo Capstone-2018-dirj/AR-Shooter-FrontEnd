@@ -5,7 +5,7 @@ const styles = {
     alignContent: 'center'
   },
   mainTitle: {
-    marginTop: 90,
+    marginTop: 60,
     fontFamily: 'Orbitron',
     fontSize: 30,
     textAlign: 'center',
@@ -15,7 +15,7 @@ const styles = {
     fontFamily: 'Orbitron',
     fontSize: 30,
     textAlign: 'center',
-    marginTop: 50,
+    //marginTop: 15,
     letterSpacing: 2
   },
   items: {
@@ -28,16 +28,23 @@ const styles = {
 
     resizeMode: 'contain'
   },
+  informativeText: {
+    textAlign: 'center',
+    marginTop: 10,
+    color: '#808080'
+  },
   smallTitle: {
     fontFamily: 'Orbitron',
     fontSize: 25,
-    marginBottom: 0,
     textAlign: 'center',
     letterSpacing: 2,
     marginTop: 30
   },
+  backButtonContainer: {
+    marginTop: 20,
+    // marginBotttom: 20
+  },
   backButton: {
-    marginTop: 10,
     color: 'black'
   }
 };
