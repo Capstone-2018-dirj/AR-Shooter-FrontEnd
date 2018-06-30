@@ -46,7 +46,7 @@ class ListRooms extends React.Component {
   handleJoinRoom(room) {
     const playerName = this.props.playerName;
     let navigate = this.props.navigate;
-    socket.emit(JOIN_ROOM, {room, playerName});
+    socket.emit(JOIN_ROOM, room, playerName);
     navigate('Lobby', { room, playerName });
   }
 
