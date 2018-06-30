@@ -1,4 +1,5 @@
 import React from 'react';
+import {Toast} from 'native-base';
 import { TouchableOpacity, Vibration } from 'react-native';
 import { AR } from 'expo';
 import * as Progress from 'react-native-progress';
@@ -35,13 +36,16 @@ export default class App extends React.Component {
   }
   componentDidMount() {
     // Turn off extra warnings
+    const { navigate } = this.props.navigation;
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
     socket.on(SHOT, () => {
       Vibration.vibrate(1000);
       this.setState(prevState => ({ health: prevState.health - 1 }));
     });
-
+    socket.on('disconnect', () => {
+      Toast.show({text: 'You have been disconnected from server. Please restart your app.', duration: 10000, position: 'top'})
+    })
     this.interval = setInterval(() => {
       socket.emit(UPDATE_PLAYER_MOVEMENT, {
         position: this.position,
