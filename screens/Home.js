@@ -16,9 +16,14 @@ export default class Home extends Component {
 
   handleAddRoomsScreen() {
     const { navigate } = this.props.navigation;
+<<<<<<< HEAD
     if (this.state.playerName)
       navigate('AllRooms', { playerName: this.state.playerName });
     else Toast.show({ text: 'Please Enter Player Name!', buttonText: 'Okay' });
+=======
+    if (this.state.playerName) navigate('AllRooms', {playerName: this.state.playerName});
+    else Toast.show({text: 'Please Enter Player Name!', buttonText: 'Okay', position: 'top'})
+>>>>>>> master
   }
   nameChangeHandler(text) {
     this.setState({ playerName: text });

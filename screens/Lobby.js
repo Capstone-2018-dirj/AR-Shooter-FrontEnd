@@ -56,6 +56,26 @@ export default class Lobby extends Component {
             full>
             <Text style={{ letterSpacing: 2 }}>Blast Off</Text>
           </Button>
+          <Button
+            bordered
+            dark
+            onPress={() => {
+              this.props.navigation.navigate('GameOver');
+            }}
+            style={{ marginTop: 40 }}
+            full>
+            <Text style={{ letterSpacing: 2 }}>Game Over.</Text>
+          </Button>
+          <Button
+            bordered
+            dark
+            onPress={() => {
+              this.props.navigation.navigate('Winner');
+            }}
+            style={{ marginTop: 40 }}
+            full>
+            <Text style={{ letterSpacing: 2 }}>Winner</Text>
+          </Button>
         </Content>
       </View>
     );
