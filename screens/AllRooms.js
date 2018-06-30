@@ -21,7 +21,10 @@ export default class Rooms extends Component {
   createRoom() {
     let navigate = this.props.navigation.navigate;
     if (this.state.name) {
-      socket.emit(CREATE_ROOM, this.state.name);
+      const roomName = this.state.name;
+      const playerName = this.props.navigation.state.params.playerName;
+      console.log(playerName)
+      socket.emit(CREATE_ROOM, {roomName, playerName});
       this.setState({ name: '' });
       navigate('Lobby', { room: this.state.name });
     } else {

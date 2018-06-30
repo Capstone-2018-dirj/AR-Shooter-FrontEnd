@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from '../styles/globals';
-import { Form, Item, Input, Label, Button } from 'native-base';
+import { Form, Item, Input, Label, Button, Toast } from 'native-base';
 import { Text, View, Image } from 'react-native';
 import BgAudio from 'react-native-background-audio';
 
@@ -16,11 +16,11 @@ export default class Home extends Component {
 
   handleAddRoomsScreen() {
     const { navigate } = this.props.navigation;
-    navigate('AllRooms');
+    if (this.state.playerName) navigate('AllRooms', {playerName: this.state.playerName});
+    else Toast.show({text: 'Please Enter Player Name!', buttonText: 'Okay'})
   }
-  nameChangeHandler(evt) {
-    this.setState({ playerName: evt.target.value });
-    console.log(this.state.playerName);
+  nameChangeHandler(text) {
+    this.setState({ playerName: text });
   }
 
   render() {
@@ -29,18 +29,13 @@ export default class Home extends Component {
         {/*<BgAudio options={audio_options} />*/}
         <Text style={styles.mainTitle}>SPACE COWBOY </Text>
         <View style={styles.items}>
-          <View style={{ alignSelf: 'center', margin: 0 }}>
-            <Image
-              style={styles.image}
-              source={require('../assets/images/space-cowboy.png')}
-            />
-          </View>
           <Form>
             <Item floatingLabel autofocus="true">
               <Label>Player Name</Label>
               <Input
                 style={{ paddingRight: 0 }}
                 value={this.state.playerName}
+                onChangeText={this.nameChangeHandler}
               />
             </Item>
             <Button
@@ -53,6 +48,12 @@ export default class Home extends Component {
               <Text style={{ letterSpacing: 2 }}>Join/Create a Room</Text>
             </Button>
           </Form>
+          <View style={{ alignSelf: 'center', margin: 0 }}>
+            <Image
+              style={styles.image}
+              source={require('../assets/images/space-cowboy.png')}
+            />
+          </View>
         </View>
       </View>
     );
