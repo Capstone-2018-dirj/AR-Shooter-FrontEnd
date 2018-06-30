@@ -23,10 +23,9 @@ export default class Rooms extends Component {
     if (this.state.name) {
       const roomName = this.state.name;
       const playerName = this.props.navigation.state.params.playerName;
-      console.log(playerName)
       socket.emit(CREATE_ROOM, {roomName, playerName});
       this.setState({ name: '' });
-      navigate('Lobby', { room: this.state.name });
+      navigate('Lobby', { room: this.state.name, playerName });
     } else {
       Toast.show({
         text: 'Please Enter Room Name!',
@@ -39,6 +38,7 @@ export default class Rooms extends Component {
   }
   render() {
     let navigate = this.props.navigation.navigate;
+    const playerName = this.props.navigation.state.params.playerName;
     return (
       <View style={styles.main}>
         <Button style= {styles.backButtonContainer}transparent onPress={() => this.props.navigation.goBack()}>
@@ -66,7 +66,7 @@ export default class Rooms extends Component {
           </Form>
         </View>
         <Text style={styles.smallTitle}>All Rooms</Text>
-        <ListRooms navigate={navigate} />
+        <ListRooms navigate={navigate} playerName={playerName} />
       </View>
     );
   }
