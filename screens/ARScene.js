@@ -1,4 +1,5 @@
 import React from 'react';
+import {Toast} from 'native-base';
 import { TouchableOpacity, Vibration } from 'react-native';
 import { AR } from 'expo';
 import * as Progress from 'react-native-progress';
@@ -36,6 +37,7 @@ export default class App extends React.Component {
   }
   componentDidMount() {
     // Turn off extra warnings
+    const { navigate } = this.props.navigation;
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
     socket.on(SHOT, () => {
@@ -44,11 +46,15 @@ export default class App extends React.Component {
     });
 
     socket.on(YOU_HIT, () => {
-      this.sphere.material.color = '0x00ff00';
-      setTimeout(() => {this.sphere.material.color = '0xff0000'}, 200)
+      this.sphere.material.color.setHex(0x0000ff);
+      this.sphere.geometry.set({ radius: 0.0174})
+      setTimeout(() => this.sphere.material.color.setHex(0xff0000), 200)
       
     });
 
+    socket.on('disconnect', () => {
+      Toast.show({text: 'You have been disconnected from server. Please restart your app.', duration: 10000, position: 'top'})
+    })
     this.interval = setInterval(() => {
       socket.emit(UPDATE_PLAYER_MOVEMENT, {
         position: this.position,
@@ -169,9 +175,9 @@ export default class App extends React.Component {
     let index;
     this.arrows.forEach((arrow, i) => {
       // arrow.position.add(arrow.velocity)
-      arrow.position.x += arrow.velocity.x * 0.095;
-      arrow.position.y += arrow.velocity.y * 0.095;
-      arrow.position.z += arrow.velocity.z * 0.095;
+      arrow.position.x += arrow.velocity.x * 0.25;
+      arrow.position.y += arrow.velocity.y * 0.25;
+      arrow.position.z += arrow.velocity.z * 0.25;
 
       if (
         Math.abs(arrow.position.x) >= MAXRANGE ||

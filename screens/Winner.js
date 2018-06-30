@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
-import styles from '../styles/gameover';
+import styles from '../styles/winner';
 import { Button } from 'native-base';
 import TypeWriter from 'react-native-typewriter';
 
-const GameOver = props => {
+const Winner = props => {
   function goToLobby() {
     props.navigation.navigate('Lobby');
   }
@@ -12,19 +12,18 @@ const GameOver = props => {
     //User Also has to leave room.
     props.navigation.navigate('AllRooms');
   }
-
   return (
     <View style={styles.main}>
       <View style={styles.items}>
         <TypeWriter style={styles.mainTitle} typing={1}>
-          Mission Failure.
+          Mission Success!
         </TypeWriter>
       </View>
       <View style={styles.items}>
         <View style={{ alignSelf: 'center', margin: 0 }}>
           <Image
             style={styles.image}
-            source={require('../assets/images/game-over.png')}
+            source={require('../assets/images/astronaut-spinning.gif')}
           />
         </View>
       </View>
@@ -50,4 +49,4 @@ const GameOver = props => {
   );
 };
 
-export default GameOver;
+export default Winner;
