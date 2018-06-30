@@ -24,6 +24,8 @@ export default class Lobby extends Component {
       navigate('ARScene');
     });
   }
+  componentWillUnmount(){
+  }
   startGame() {
     socket.emit(START_GAME);
   }
