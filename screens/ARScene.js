@@ -44,8 +44,9 @@ export default class App extends React.Component {
     });
 
     socket.on(YOU_HIT, () => {
-      console.log(this.sphere);
       this.sphere.material.color = '0x00ff00';
+      setTimeout(() => {this.sphere.material.color = '0xff0000'}, 2000)
+      
     });
 
     this.interval = setInterval(() => {
@@ -214,8 +215,7 @@ export default class App extends React.Component {
       position: this.position,
       aim: this.aim
     });
-    console.log(this.sphere.geometry.radius)
-    this.sphere.geometry.radius = 0.1;
+    
 
     // this.cooldown();
   };
