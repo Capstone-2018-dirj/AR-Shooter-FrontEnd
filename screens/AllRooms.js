@@ -5,6 +5,8 @@ import ListRooms from '../components/listRooms';
 const CREATE_ROOM = 'CREATE_ROOM';
 import styles from '../styles/globals';
 import socket from '../socket';
+import TypeWriter from 'react-native-typewriter';
+
 
 export default class Rooms extends Component {
   constructor() {
@@ -45,7 +47,7 @@ export default class Rooms extends Component {
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <View style={styles.items}>
-          <Text style={styles.title}>SPACE COWBOY</Text>
+          <Text style={styles.title}>Hello, {this.props.navigation.state.params.playerName}</Text>
           <Form>
             <Item floatingLabel>
               <Label>Room Name</Label>

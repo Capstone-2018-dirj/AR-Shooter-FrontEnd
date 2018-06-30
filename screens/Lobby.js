@@ -69,7 +69,9 @@ export default class Lobby extends Component {
           <Button
             bordered
             dark
-            onPress={this.startGame}
+            onPress={() => {
+              this.props.navigation.navigate('Winner');
+            }}
             style={{ marginTop: 40 }}
             full>
             <Text style={{ letterSpacing: 2 }}>Winner</Text>

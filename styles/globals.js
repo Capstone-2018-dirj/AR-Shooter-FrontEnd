@@ -23,8 +23,8 @@ const styles = {
     marginRight: 20
   },
   image: {
-    width: 320,
-    height: 320,
+    width: 300,
+    height: 200,
     resizeMode: 'contain'
   },
   informativeText: {

@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 import Home from './screens/Home';
 import ARScene from './screens/ARScene';
 import GameOver from './screens/GameOver';
+import Winner from './screens/Winner';
 import AllRooms from './screens/AllRooms';
 import Lobby from './screens/Lobby';
 import { Font, AppLoading } from 'expo';
@@ -43,7 +44,8 @@ const RootNavigator = createStackNavigator(
     ARScene: { screen: ARScene },
     AllRooms: { screen: AllRooms },
     Lobby: { screen: Lobby },
-    GameOver: { screen: GameOver }
+    GameOver: { screen: GameOver },
+    Winner: { screen: Winner }
   },
   {
     headerMode: 'none',
