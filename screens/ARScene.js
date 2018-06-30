@@ -166,9 +166,9 @@ export default class App extends React.Component {
     let index;
     this.arrows.forEach((arrow, i) => {
       // arrow.position.add(arrow.velocity)
-      arrow.position.x += arrow.velocity.x * 0.095;
-      arrow.position.y += arrow.velocity.y * 0.095;
-      arrow.position.z += arrow.velocity.z * 0.095;
+      arrow.position.x += arrow.velocity.x * 0.25;
+      arrow.position.y += arrow.velocity.y * 0.25;
+      arrow.position.z += arrow.velocity.z * 0.25;
 
       if (
         Math.abs(arrow.position.x) >= MAXRANGE ||
