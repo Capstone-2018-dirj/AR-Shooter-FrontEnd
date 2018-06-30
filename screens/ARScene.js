@@ -47,8 +47,7 @@ export default class App extends React.Component {
 
     socket.on(YOU_HIT, () => {
       this.sphere.material.color.setHex(0x0000ff);
-      this.sphere.geometry.set({ radius: 0.0174})
-      setTimeout(() => this.sphere.material.color.setHex(0xff0000), 200)
+      setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500)
       
     });
 
