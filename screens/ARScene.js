@@ -45,7 +45,7 @@ export default class App extends React.Component {
 
     socket.on(YOU_HIT, () => {
       this.sphere.material.color = '0x00ff00';
-      setTimeout(() => {this.sphere.material.color = '0xff0000'}, 2000)
+      setTimeout(() => {this.sphere.material.color = '0xff0000'}, 200)
       
     });
 
