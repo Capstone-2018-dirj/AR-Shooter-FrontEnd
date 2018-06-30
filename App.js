@@ -42,8 +42,8 @@ const RootNavigator = createStackNavigator(
     Home: { screen: Home },
     ARScene: { screen: ARScene },
     AllRooms: { screen: AllRooms },
-    GameOver: { screen: GameOver },
-    Lobby: { screen: Lobby }
+    Lobby: { screen: Lobby },
+    GameOver: { screen: GameOver }
   },
   {
     headerMode: 'none',

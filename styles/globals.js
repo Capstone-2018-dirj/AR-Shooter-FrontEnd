@@ -25,7 +25,6 @@ const styles = {
   image: {
     width: 320,
     height: 320,
-
     resizeMode: 'contain'
   },
   informativeText: {
@@ -41,7 +40,7 @@ const styles = {
     marginTop: 30
   },
   backButtonContainer: {
-    marginTop: 20,
+    marginTop: 20
     // marginBotttom: 20
   },
   backButton: {
