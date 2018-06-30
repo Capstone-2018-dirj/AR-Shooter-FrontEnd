@@ -40,6 +40,10 @@ export default class App extends React.Component {
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
 
+    setTimeout(() => {
+      this.setState({ gameDisabled: false });
+    }, 5000);
+
     socket.on(SHOT, () => {
       const { navigate } = this.props.navigation;
       Vibration.vibrate(1000);
@@ -64,6 +68,10 @@ export default class App extends React.Component {
     }, 50);
   }
 
+  componentWillUnmount() {
+    socket.off(SHOT);
+  }
+
   //Limits the firing Rate of a player to every 500MS by toggling the Touchable Opacity
   cooldown = () => {
     setTimeout(() => {
@@ -79,9 +87,6 @@ export default class App extends React.Component {
     // World for rear, Face for front (iPhone X only)
     const { navigate } = this.props.navigation;
 
-    setTimeout(() => {
-      this.setState({ gameDisabled: false });
-    }, 5000);
     return (
       <TouchableOpacity
         style={{
