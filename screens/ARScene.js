@@ -1,5 +1,5 @@
 import React from 'react';
-import {Toast} from 'native-base';
+import { Toast } from 'native-base';
 import { TouchableOpacity, Vibration } from 'react-native';
 import { AR } from 'expo';
 import * as Progress from 'react-native-progress';
@@ -36,16 +36,26 @@ export default class App extends React.Component {
   }
   componentDidMount() {
     // Turn off extra warnings
-    const { navigate } = this.props.navigation;
+
     THREE.suppressExpoWarnings(true);
     ThreeAR.suppressWarnings(true);
+
     socket.on(SHOT, () => {
+      const { navigate } = this.props.navigation;
       Vibration.vibrate(1000);
+      if (this.state.health === 1) {
+        navigate('GameOver');
+      }
       this.setState(prevState => ({ health: prevState.health - 1 }));
     });
     socket.on('disconnect', () => {
-      Toast.show({text: 'You have been disconnected from server. Please restart your app.', duration: 10000, position: 'top'})
-    })
+      Toast.show({
+        text:
+          'You have been disconnected from server. Please restart your app.',
+        duration: 10000,
+        position: 'top'
+      });
+    });
     this.interval = setInterval(() => {
       socket.emit(UPDATE_PLAYER_MOVEMENT, {
         position: this.position,
@@ -53,6 +63,7 @@ export default class App extends React.Component {
       });
     }, 50);
   }
+
   //Limits the firing Rate of a player to every 500MS by toggling the Touchable Opacity
   cooldown = () => {
     setTimeout(() => {
@@ -66,6 +77,8 @@ export default class App extends React.Component {
     // `isArCameraStateEnabled` Will render the camera tracking information on the screen.
     // `arTrackingConfiguration` denotes which camera the AR Session will use.
     // World for rear, Face for front (iPhone X only)
+    const { navigate } = this.props.navigation;
+
     setTimeout(() => {
       this.setState({ gameDisabled: false });
     }, 5000);

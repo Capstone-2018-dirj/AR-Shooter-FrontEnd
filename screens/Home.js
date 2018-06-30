@@ -16,14 +16,14 @@ export default class Home extends Component {
 
   handleAddRoomsScreen() {
     const { navigate } = this.props.navigation;
-<<<<<<< HEAD
     if (this.state.playerName)
       navigate('AllRooms', { playerName: this.state.playerName });
-    else Toast.show({ text: 'Please Enter Player Name!', buttonText: 'Okay' });
-=======
-    if (this.state.playerName) navigate('AllRooms', {playerName: this.state.playerName});
-    else Toast.show({text: 'Please Enter Player Name!', buttonText: 'Okay', position: 'top'})
->>>>>>> master
+    else
+      Toast.show({
+        text: 'Please Enter Player Name!',
+        buttonText: 'Okay',
+        position: 'top'
+      });
   }
   nameChangeHandler(text) {
     this.setState({ playerName: text });
@@ -34,13 +34,13 @@ export default class Home extends Component {
       <View style={styles.main}>
         {/*<BgAudio options={audio_options} />*/}
         <Text style={styles.mainTitle}>SPACE COWBOY </Text>
-        <View style={{ alignSelf: 'center', margin: 0 }}>
-          <Image
-            style={styles.image}
-            source={require('../assets/images/space-cowboy.png')}
-          />
-        </View>
         <View style={styles.items}>
+          <View style={{ alignSelf: 'center', margin: 0 }}>
+            <Image
+              style={styles.image}
+              source={require('../assets/images/space-cowboy.png')}
+            />
+          </View>
           <Form>
             <Item floatingLabel autofocus="true">
               <Label>Player Name</Label>
