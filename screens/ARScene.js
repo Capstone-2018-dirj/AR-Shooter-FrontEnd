@@ -17,6 +17,7 @@ const MAXRANGE = 5;
 const SHOT = 'SHOT';
 const SHOOT = 'SHOOT';
 const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
+const YOU_HIT = 'YOU_HIT';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -40,6 +41,11 @@ export default class App extends React.Component {
     socket.on(SHOT, () => {
       Vibration.vibrate(1000);
       this.setState(prevState => ({ health: prevState.health - 1 }));
+    });
+
+    socket.on(YOU_HIT, () => {
+      console.log(this.sphere);
+      this.sphere.material.color = '0x00ff00';
     });
 
     this.interval = setInterval(() => {
@@ -202,11 +208,14 @@ export default class App extends React.Component {
 
     this.arrows.push(arrowHelper);
     this.scene.add(arrowHelper);
+    
 
     socket.emit(SHOOT, {
       position: this.position,
       aim: this.aim
     });
+    console.log(this.sphere.geometry.radius)
+    this.sphere.geometry.radius = 0.1;
 
     // this.cooldown();
   };
