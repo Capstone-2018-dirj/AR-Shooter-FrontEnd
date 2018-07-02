@@ -109,7 +109,8 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}>
+        disabled={this.state.gameDisabled || this.state.hasShot}
+      >
         (
         <GraphicsView
           style={{
@@ -123,13 +124,23 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
-        <Progress.Bar
-          progress={this.state.health / 10}
-          color="green"
-          borderWidth={0}
-          width={null}
-          height={50}
-        />
+        {this.state.health > 3 ? (
+          <Progress.Bar
+            progress={this.state.health / 10}
+            color="green"
+            borderWidth={0}
+            width={null}
+            height={50}
+          />
+        ) : (
+          <Progress.Bar
+            progress={this.state.health / 10}
+            color="red"
+            borderWidth={0}
+            width={null}
+            height={50}
+          />
+        )}
         )
       </TouchableOpacity>
     );
