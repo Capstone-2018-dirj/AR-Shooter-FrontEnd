@@ -25,7 +25,6 @@ export default class Lobby extends Component {
     });
   }
   componentWillUnmount() {
-    this.handleLeaveRoom();
   }
   startGame() {
     socket.emit(START_GAME);
