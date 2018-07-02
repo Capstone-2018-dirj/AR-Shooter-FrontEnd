@@ -51,9 +51,6 @@ export default class App extends React.Component {
     socket.on(SHOT, () => {
       Vibration.vibrate(1000);
 
-      if (this.state.health === 1) {
-        navigate('GameOver');
-      }
       this.setState(prevState => ({ health: prevState.health - 1 }));
     });
 
@@ -102,7 +99,9 @@ export default class App extends React.Component {
     // `arTrackingConfiguration` denotes which camera the AR Session will use.
     // World for rear, Face for front (iPhone X only)
     const { navigate } = this.props.navigation;
-
+    if (this.state.health === 0) {
+      navigate('GameOver');
+    }
     return (
       <TouchableOpacity
         style={{
