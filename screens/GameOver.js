@@ -32,18 +32,20 @@ const GameOver = props => {
         <Button
           onPress={goToLobby}
           bordered
-          dark
+          light
           style={{ marginTop: 40 }}
           full>
-          <Text style={{ letterSpacing: 2 }}>Try Again?</Text>
+          <Text style={{ letterSpacing: 2, color: 'white' }}>Try Again?</Text>
         </Button>
         <Button
           onPress={goToAllRooms}
           bordered
-          dark
+          light
           style={{ marginTop: 40 }}
           full>
-          <Text style={{ letterSpacing: 2 }}>Abort Mission</Text>
+          <Text style={{ letterSpacing: 2, color: 'white' }}>
+            Abort Mission
+          </Text>
         </Button>
       </View>
     </View>

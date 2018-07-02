@@ -10,7 +10,8 @@ const styles = {
     fontFamily: 'Orbitron',
     fontSize: 30,
     textAlign: 'center',
-    letterSpacing: 2
+    letterSpacing: 2,
+    color: 'white'
   },
   title: {
     fontFamily: 'Orbitron',
