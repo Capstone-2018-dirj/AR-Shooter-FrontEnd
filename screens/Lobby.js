@@ -3,16 +3,21 @@ import { Content, Button, Icon, Toast } from 'native-base';
 import { Text, View } from 'react-native';
 import socket from '../socket';
 import styles from '../styles/globals';
+import listPlayers from '../components/listPlayers';
+import ListPlayers from '../components/listPlayers';
 
 const START_GAME = 'START_GAME';
 const GAME_STARTED = 'GAME_STARTED';
 const LEAVE_ROOM = 'LEAVE_ROOM';
+const JOIN_ROOM = 'JOIN_ROOM';
+const UPDATE_ROOMS = 'UPDATE_ROOMS';
 
 export default class Lobby extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showToast: false
+      showToast: false,
+      room: []
     };
     this.startGame = this.startGame.bind(this);
     this.handleLeaveRoom = this.handleLeaveRoom.bind(this);
@@ -23,7 +28,13 @@ export default class Lobby extends Component {
     socket.on(GAME_STARTED, () => {
       navigate('ARScene');
     });
+
+    socket.on(UPDATE_ROOMS, rooms => {
+      const currRoom = rooms[this.props.navigation.state.params.room];
+      this.setState({ room: currRoom });
+    });
   }
+
   componentWillUnmount() {
     this.handleLeaveRoom();
   }
@@ -40,6 +51,7 @@ export default class Lobby extends Component {
     });
     this.props.navigation.navigate('AllRooms');
   }
+
   render() {
     return (
       <View style={styles.main}>
@@ -49,16 +61,22 @@ export default class Lobby extends Component {
           onPress={this.handleLeaveRoom}>
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
-        <Content style={styles.items}>
-          <Text style={styles.title}>Lobby</Text>
-          <Button
-            bordered
-            dark
-            onPress={this.startGame}
-            style={{ marginTop: 40 }}
-            full>
-            <Text style={{ letterSpacing: 2 }}>Blast Off</Text>
-          </Button>
+        <Text style={styles.title}>Lobby</Text>
+        <Button
+          bordered
+          dark
+          onPress={this.startGame}
+          style={{
+            marginTop: 40,
+            marginLeft: 20,
+            marginRight: 20,
+            marginBottom: 20
+          }}
+          full>
+          <Text style={{ letterSpacing: 2 }}>Blast Off</Text>
+        </Button>
+        <Content>
+          <ListPlayers names={this.state.room} />;
         </Content>
       </View>
     );

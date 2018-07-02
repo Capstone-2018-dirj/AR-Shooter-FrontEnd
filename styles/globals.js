@@ -15,7 +15,6 @@ const styles = {
     fontFamily: 'Orbitron',
     fontSize: 30,
     textAlign: 'center',
-    //marginTop: 15,
     letterSpacing: 2
   },
   items: {
@@ -45,6 +44,10 @@ const styles = {
   },
   backButton: {
     color: 'black'
+  },
+  lobbyContainer: {
+    marginLeft: 20,
+    marginRight: 20
   }
 };
 
