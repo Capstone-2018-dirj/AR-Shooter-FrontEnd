@@ -50,17 +50,19 @@ export default class App extends React.Component {
 
     socket.on(SHOT, () => {
       Vibration.vibrate(1000);
-
       this.setState(prevState => ({ health: prevState.health - 1 }));
+      if (this.state.health <= 0) {
+        navigate('GameOver');
+      }
     });
 
     socket.on(YOU_HIT, () => {
       this.sphere.material.color.setHex(0x0000ff);
-      setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500);
+       setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500);
     });
 
     socket.on(WINNER, () => {
-      navigate('Winner')
+      navigate('Winner');
     });
 
     socket.on('disconnect', () => {
@@ -80,8 +82,10 @@ export default class App extends React.Component {
   }
 
   componentWillUnmount() {
+    clearInterval(this.interval);
     socket.off(SHOT);
     socket.off(UPDATE_PLAYER_MOVEMENT);
+    socket.off(WINNER);
     console.log = this.logs; // assigns console.log back to itself
   }
 
@@ -93,23 +97,13 @@ export default class App extends React.Component {
   };
 
   render() {
-    // You need to add the `isArEnabled` & `arTrackingConfiguration` props.
-    // `isArRunningStateEnabled` Will show us the play/pause button in the corner.
-    // `isArCameraStateEnabled` Will render the camera tracking information on the screen.
-    // `arTrackingConfiguration` denotes which camera the AR Session will use.
-    // World for rear, Face for front (iPhone X only)
-    const { navigate } = this.props.navigation;
-    if (this.state.health === 0) {
-      navigate('GameOver');
-    }
     return (
       <TouchableOpacity
         style={{
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}
-      >
+        disabled={this.state.gameDisabled || this.state.hasShot}>
         (
         <GraphicsView
           style={{
@@ -173,10 +167,10 @@ export default class App extends React.Component {
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
     // Combine our geometry and material
-    this.sphere = new THREE.Mesh(geometry, material);
-    this.sphere.position.z = 0;
-    this.sphere.position.x = this.camera.position.x;
-    this.sphere.position.y = this.camera.position.y;
+    // this.sphere = new THREE.Mesh(geometry, material);
+    // this.sphere.position.z = 0;
+    // this.sphere.position.x = this.camera.position.x;
+    // this.sphere.position.y = this.camera.position.y;
     // Add the sphere to the scene
     //=======================================================================
 
@@ -231,7 +225,7 @@ export default class App extends React.Component {
   };
 
   showPosition = () => {
-    // this.setState({ hasShot: true });
+    this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
     var origin = new THREE.Vector3(
@@ -256,6 +250,6 @@ export default class App extends React.Component {
       aim: this.aim
     });
 
-    // this.cooldown();
+    this.cooldown();
   };
 }
