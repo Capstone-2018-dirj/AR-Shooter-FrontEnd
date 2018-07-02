@@ -1,6 +1,6 @@
 import React from 'react';
 import { Toast } from 'native-base';
-import { TouchableOpacity, Vibration } from 'react-native';
+import { TouchableOpacity, Vibration, View, Image, Text } from 'react-native';
 import { AR } from 'expo';
 import * as Progress from 'react-native-progress';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
@@ -57,8 +57,7 @@ export default class App extends React.Component {
     });
 
     socket.on(YOU_HIT, () => {
-      this.sphere.material.color.setHex(0x0000ff);
-       setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500);
+      //do something with image
     });
 
     socket.on(WINNER, () => {
@@ -104,7 +103,6 @@ export default class App extends React.Component {
         }}
         onPress={this.showPosition}
         disabled={this.state.gameDisabled || this.state.hasShot}>
-        (
         <GraphicsView
           style={{
             flex: 10
@@ -117,6 +115,22 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
+
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+          <Image
+            style={{ width: 100, height: 100 }}
+            source={require('../assets/images/crosshair.png')}
+          />
+        </View>
         {this.state.health > 3 ? (
           <Progress.Bar
             progress={this.state.health / 10}
@@ -134,7 +148,6 @@ export default class App extends React.Component {
             height={50}
           />
         )}
-        )
       </TouchableOpacity>
     );
   }
@@ -162,23 +175,11 @@ export default class App extends React.Component {
 
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
 
-    //sphere
-    const geometry = new THREE.SphereGeometry(0.0154);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-
-    // Combine our geometry and material
-    // this.sphere = new THREE.Mesh(geometry, material);
-    // this.sphere.position.z = 0;
-    // this.sphere.position.x = this.camera.position.x;
-    // this.sphere.position.y = this.camera.position.y;
-    // Add the sphere to the scene
     //=======================================================================
 
     // Setup a light so we can see the sphere color
     // AmbientLight colors all things in the scene equally.
     this.scene.add(new THREE.AmbientLight(0xffffff));
-
-    this.scene.add(this.sphere);
   };
 
   // When the phone rotates, or the view changes size, this method will be called.
@@ -198,9 +199,6 @@ export default class App extends React.Component {
     // Finally render the scene with the AR Camera
     this.camera.getWorldPosition(this.position);
     this.camera.getWorldDirection(this.aim);
-    this.sphere.position.x = this.position.x + this.aim.x;
-    this.sphere.position.y = this.position.y + this.aim.y;
-    this.sphere.position.z = this.position.z + this.aim.z;
     let index;
     this.arrows.forEach((arrow, i) => {
       // arrow.position.add(arrow.velocity)
