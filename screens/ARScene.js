@@ -62,7 +62,9 @@ export default class App extends React.Component {
       setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500);
     });
 
-    socket.on(WINNER, () => navigate('Winner'));
+    socket.on(WINNER, () => {
+      navigate('Winner')
+    });
 
     socket.on('disconnect', () => {
       Toast.show({
