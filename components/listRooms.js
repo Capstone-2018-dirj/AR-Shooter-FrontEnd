@@ -51,20 +51,21 @@ class ListRooms extends React.Component {
   }
 
   render() {
-    const roomsArr = Object.keys(this.state.rooms);
+    const roomNames = Object.keys(this.state.rooms);
+
     return (
       <Content style={{ marginLeft: 20, marginRight: 20 }}>
         <Container style={styles.main}>
           <List style={{ marginTop: 0 }}>
-            {roomsArr.length === 0 ? (
+            {roomNames.length === 0 ? (
               <Text style={styles.informativeText}> No rooms available. </Text>
             ) : (
-              roomsArr.map(room => {
+              roomNames.map(name => {
                 return (
                   <ListItem
                     avatar
-                    key={room}
-                    onPress={() => this.handleJoinRoom(room)}>
+                    key={name}
+                    onPress={() => this.handleJoinRoom(name)}>
                     <Left>
                       <Thumbnail
                         source={{
@@ -74,12 +75,12 @@ class ListRooms extends React.Component {
                       />
                     </Left>
                     <Body>
-                      <Text>{room}</Text>
+                      <Text>{name}</Text>
                       <Text note>Game in session.</Text>
                     </Body>
                     <Right>
                       <Text note>
-                        {this.state.rooms[room].length} player(s) active.
+                        {this.state.rooms[name].length} player(s) active.
                       </Text>
                     </Right>
                   </ListItem>
