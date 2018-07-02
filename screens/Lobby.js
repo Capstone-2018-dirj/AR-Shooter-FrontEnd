@@ -3,13 +3,12 @@ import { Content, Button, Icon, Toast } from 'native-base';
 import { Text, View } from 'react-native';
 import socket from '../socket';
 import styles from '../styles/globals';
-import listPlayers from '../components/listPlayers';
 import ListPlayers from '../components/listPlayers';
 
 const START_GAME = 'START_GAME';
 const GAME_STARTED = 'GAME_STARTED';
 const LEAVE_ROOM = 'LEAVE_ROOM';
-const JOIN_ROOM = 'JOIN_ROOM';
+
 const UPDATE_ROOMS = 'UPDATE_ROOMS';
 
 export default class Lobby extends Component {
