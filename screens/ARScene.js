@@ -12,7 +12,6 @@ import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
 
-
 const MAXRANGE = 5;
 
 // socket events
@@ -20,6 +19,7 @@ const SHOT = 'SHOT';
 const SHOOT = 'SHOOT';
 const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
 const YOU_HIT = 'YOU_HIT';
+const WINNER = 'WINNER';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -39,16 +39,18 @@ export default class App extends React.Component {
   componentDidMount() {
     // Turn off extra warnings
     this.logs = console.log;
-    console.log = () => {}
+    console.log = () => {};
     THREE.suppressExpoWarnings();
+
+    const { navigate } = this.props.navigation;
 
     setTimeout(() => {
       this.setState({ gameDisabled: false });
     }, 5000);
 
     socket.on(SHOT, () => {
-      const { navigate } = this.props.navigation;
       Vibration.vibrate(1000);
+
       if (this.state.health === 1) {
         navigate('GameOver');
       }
@@ -56,9 +58,9 @@ export default class App extends React.Component {
     });
 
     socket.on(YOU_HIT, () => {
+      socket.on(WINNER, navigate('Winner'));
       this.sphere.material.color.setHex(0x0000ff);
-      setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500)
-
+      setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500);
     });
 
     socket.on('disconnect', () => {
@@ -79,7 +81,7 @@ export default class App extends React.Component {
 
   componentWillUnmount() {
     socket.off(SHOT);
-    console.log = this.logs // assigns console.log back to itself
+    console.log = this.logs; // assigns console.log back to itself
   }
 
   //Limits the firing Rate of a player to every 500MS by toggling the Touchable Opacity
@@ -235,12 +237,10 @@ export default class App extends React.Component {
     this.arrows.push(arrowHelper);
     this.scene.add(arrowHelper);
 
-
     socket.emit(SHOOT, {
       position: this.position,
       aim: this.aim
     });
-
 
     // this.cooldown();
   };
