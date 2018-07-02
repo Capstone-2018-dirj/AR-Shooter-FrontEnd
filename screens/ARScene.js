@@ -81,6 +81,10 @@ export default class App extends React.Component {
 
   componentWillUnmount() {
     socket.off(SHOT);
+<<<<<<< HEAD
+=======
+    socket.off(UPDATE_PLAYER_MOVEMENT);
+>>>>>>> master
     console.log = this.logs; // assigns console.log back to itself
   }
 
@@ -105,7 +109,8 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}>
+        disabled={this.state.gameDisabled || this.state.hasShot}
+      >
         (
         <GraphicsView
           style={{
