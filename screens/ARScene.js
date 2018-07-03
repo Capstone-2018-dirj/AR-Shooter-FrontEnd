@@ -35,7 +35,8 @@ export default class App extends React.Component {
     this.state = {
       hasShot: false,
       gameDisabled: true,
-      health: 10
+      health: 10,
+      crosshair: 150
     };
     this.cooldown = this.cooldown.bind(this);
     prepareSound();
@@ -65,6 +66,8 @@ export default class App extends React.Component {
 
     socket.on(YOU_HIT, () => {
       //do something with image, maybe zoom in for a second?
+      this.setState({crosshair: 200})
+      setTimeout(() => this.setState({crosshair: 150}), 200);
     });
 
     socket.on(WINNER, () => {
@@ -145,7 +148,7 @@ export default class App extends React.Component {
 
         <View style={styles.centerOverlay}>
           <Image
-            style={{ width: 150, height: 150 }}
+            style={{ width: this.state.crosshair, height: this.state.crosshair }}
             source={require('../assets/images/futuristic_crosshair.png')}
           />
         </View>
