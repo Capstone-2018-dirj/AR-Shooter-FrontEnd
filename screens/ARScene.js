@@ -118,7 +118,7 @@ export default class App extends React.Component {
             <Progress.Bar
               progress={this.state.health / 10}
               color="red"
-              width={150}
+              width={120}
               height={30}
             />
           </View>
