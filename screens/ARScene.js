@@ -92,6 +92,7 @@ export default class App extends React.Component {
     });
 
     this.interval = setInterval(() => {
+      this.heartHandler()
       socket.emit(UPDATE_PLAYER_MOVEMENT, {
         position: this.position,
         aim: this.aim
@@ -217,7 +218,7 @@ export default class App extends React.Component {
     const heartMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
     this.heart = new THREE.Mesh(heartGeometry, heartMaterial);
     this.heart.scale.set(0.005, 0.005, 0.005);
-    this.heart.position.set(1, 0, -1);
+    this.heart.position.set(2, 0, -2);
     this.heart.rotation.set(0, 0, Math.PI);
     this.scene.add(this.heart);
 
@@ -268,12 +269,13 @@ export default class App extends React.Component {
 
     this.heart.rotation.y += Math.PI / 32;
     this.renderer.render(this.scene, this.camera);
-    this.heartHandler();
+
   };
   heartHandler = () => {
     if (this.state.heart && heartGrabbed(this.position, this.heart.position)) {
+      this.logs('OUR HEALTH', this.state.health)
+      this.setState(prevState => ({health: howMuchHealth(prevState.health)}))
       socket.emit(HEART_PICKED_UP);
-      this.setState(prevState => ({health: howMuchHealth(prevState)}))
     }
   };
 
