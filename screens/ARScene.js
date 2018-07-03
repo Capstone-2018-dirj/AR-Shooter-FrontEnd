@@ -12,7 +12,7 @@ import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
 import { loadSounds, playSound, prepareSound } from '../utils/sound';
-import heartPosition from '../utils/heartPosition';
+import {heartGrabbed, howMuchHealth} from '../utils/heartPosition';
 import laser from '../assets/audio/laser.mp3';
 
 import styles from '../styles/globals';
@@ -39,7 +39,8 @@ export default class App extends React.Component {
       hasShot: false,
       gameDisabled: true,
       health: 10,
-      crosshair: 150
+      crosshair: 150,
+      heart: true
     };
     this.cooldown = this.cooldown.bind(this);
     prepareSound();
@@ -54,7 +55,6 @@ export default class App extends React.Component {
     THREE.suppressExpoWarnings();
 
     const { navigate } = this.props.navigation;
-
     setTimeout(() => {
       this.setState({ gameDisabled: false });
     }, 5000);
@@ -73,8 +73,9 @@ export default class App extends React.Component {
       setTimeout(() => this.setState({ crosshair: 150 }), 200);
     });
 
-    socket.on(ERASE_HEART, () => {
+    socket.once(ERASE_HEART, () => {
       this.scene.remove(this.heart);
+      this.setState({heart: false})
     });
 
     socket.on(WINNER, () => {
@@ -270,14 +271,15 @@ export default class App extends React.Component {
     this.heartHandler();
   };
   heartHandler = () => {
-    this.logs('OUR POSITION>>>', this.position, '\n', 'HEART POSITION', this.heart.position);
-    if (heartPosition(this.position, this.heart.position)) {
+    if (heartGrabbed(this.position, this.heart.position) && this.state.heart) {
       socket.emit(HEART_PICKED_UP);
+      this.setState(prevState => ({health: howMuchHealth(prevState)}))
     }
   };
 
   showPosition = async () => {
     await playSound('shoot');
+    this.logs('OUR SCENE>>>>>', this.scene);
     this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
