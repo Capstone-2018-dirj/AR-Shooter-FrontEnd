@@ -14,16 +14,19 @@ export default class Home extends Component {
     this.handleAddRoomsScreen = this.handleAddRoomsScreen.bind(this);
   }
 
+
+
   handleAddRoomsScreen() {
     const { navigate } = this.props.navigation;
-    if (this.state.playerName)
+    if (this.state.playerName) {
       navigate('AllRooms', { playerName: this.state.playerName });
-    else
+    } else {
       Toast.show({
         text: 'Please Enter Player Name!',
         buttonText: 'Okay',
         position: 'top'
       });
+    }
   }
   nameChangeHandler(text) {
     this.setState({ playerName: text });
@@ -45,6 +48,8 @@ export default class Home extends Component {
             <Item floatingLabel autofocus="true">
               <Label>Player Name</Label>
               <Input
+                returnKeyType="next"
+                onSubmitEditing={this.handleAddRoomsScreen}
                 style={{ margin: 0 }}
                 value={this.state.playerName}
                 onChangeText={this.nameChangeHandler}

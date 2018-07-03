@@ -7,7 +7,6 @@ import styles from '../styles/globals';
 import socket from '../socket';
 import TypeWriter from 'react-native-typewriter';
 
-
 export default class Rooms extends Component {
   constructor() {
     super();
@@ -43,18 +42,25 @@ export default class Rooms extends Component {
     const playerName = this.props.navigation.state.params.playerName;
     return (
       <View style={styles.main}>
-        <Button style= {styles.backButtonContainer}transparent onPress={() => this.props.navigation.goBack()}>
+        <Button
+          style={styles.backButtonContainer}
+          transparent
+          onPress={() => this.props.navigation.goBack()}>
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <View style={styles.items}>
-          <Text style={styles.title}>Hello, {this.props.navigation.state.params.playerName}</Text>
+          <Text style={styles.title}>
+            Hello, {this.props.navigation.state.params.playerName}
+          </Text>
           <Form>
             <Item floatingLabel>
               <Label>Room Name</Label>
               <Input
+                returnKeyType="next"
                 style={{ paddingRight: 0 }}
                 value={this.state.name}
                 onChangeText={this.handleChange}
+                onSubmitEditing={this.createRoom}
               />
             </Item>
             <Button
