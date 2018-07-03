@@ -13,7 +13,8 @@ import { View as GraphicsView } from 'expo-graphics';
 import socket from '../socket';
 import { loadSounds, playSound, prepareSound } from '../utils/sound';
 import {heartGrabbed, howMuchHealth} from '../utils/heartPosition';
-import laser from '../assets/audio/laser.mp3';
+import createLaser from '../utils/createLaser';
+import laserSound from '../assets/audio/laser.mp3';
 
 import styles from '../styles/globals';
 const MAXRANGE = 5;
@@ -26,6 +27,7 @@ const YOU_HIT = 'YOU_HIT';
 const WINNER = 'WINNER';
 const HEART_PICKED_UP = 'HEART_PICKED_UP';
 const ERASE_HEART = 'ERASE_HEART';
+const LASER_SHOT = 'LASER_SHOT';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -34,7 +36,7 @@ export default class App extends React.Component {
     this.position = new THREE.Vector3();
     this.aim = new THREE.Vector3();
     this.clock = new THREE.Clock();
-    this.arrows = [];
+    this.lasers = [];
     this.state = {
       hasShot: false,
       gameDisabled: true,
@@ -45,7 +47,7 @@ export default class App extends React.Component {
     this.cooldown = this.cooldown.bind(this);
     prepareSound();
     loadSounds({
-      shoot: laser
+      shoot: laserSound
     });
   }
   componentDidMount() {
@@ -66,6 +68,12 @@ export default class App extends React.Component {
         navigate('GameOver', { room: this.props.navigation.state.params.room });
       }
     });
+
+    socket.on(LASER_SHOT, ({position, aim}) => {
+      let laser = createLaser(position, aim);
+      this.lasers.push(laser);
+      this.scene.add(laser);
+    })
 
     socket.on(YOU_HIT, () => {
       //do something with image, maybe zoom in for a second?
@@ -222,16 +230,10 @@ export default class App extends React.Component {
     this.heart.rotation.set(0, 0, Math.PI);
     this.scene.add(this.heart);
 
-    //=======================================================================
-
-    // Setup a light so we can see the sphere color
-    // AmbientLight colors all things in the scene equally.
     this.scene.add(new THREE.AmbientLight(0xffffff));
   };
 
-  // When the phone rotates, or the view changes size, this method will be called.
   onResize = ({ x, y, scale, width, height }) => {
-    // Let's stop the function if we haven't setup our scene yet
     if (!this.renderer) {
       return;
     }
@@ -241,30 +243,28 @@ export default class App extends React.Component {
     this.renderer.setSize(width, height);
   };
 
-  // Called every frame.
   onRender = async () => {
-    // Finally render the scene with the AR Camera
     this.camera.getWorldPosition(this.position);
     this.camera.getWorldDirection(this.aim);
     let index;
-    this.arrows.forEach((arrow, i) => {
-      // arrow.position.add(arrow.velocity)
-      arrow.position.x += arrow.velocity.x * 0.25;
-      arrow.position.y += arrow.velocity.y * 0.25;
-      arrow.position.z += arrow.velocity.z * 0.25;
+    this.lasers.forEach((laser, i) => {
+      // laser.position.add(laser.velocity)
+      laser.position.x += laser.velocity.x * 0.25;
+      laser.position.y += laser.velocity.y * 0.25;
+      laser.position.z += laser.velocity.z * 0.25;
 
       if (
-        Math.abs(arrow.position.x) >= MAXRANGE ||
-        Math.abs(arrow.position.y) >= MAXRANGE ||
-        Math.abs(arrow.position.z) >= MAXRANGE
+        Math.abs(laser.position.x) >= MAXRANGE ||
+        Math.abs(laser.position.y) >= MAXRANGE ||
+        Math.abs(laser.position.z) >= MAXRANGE
       ) {
         index = i;
       }
     });
 
     if (index !== undefined) {
-      this.scene.remove(this.arrows[index]);
-      this.arrows.splice(index, 1);
+      this.scene.remove(this.lasers[index]);
+      this.lasers.splice(index, 1);
     }
 
     this.heart.rotation.y += Math.PI / 32;
@@ -282,24 +282,10 @@ export default class App extends React.Component {
   showPosition = async () => {
     await playSound('shoot');
     this.setState({ hasShot: true });
-    var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
-    dir.normalize();
-    var origin = new THREE.Vector3(
-      this.position.x,
-      this.position.y,
-      this.position.z
-    );
-    var length = 0.5;
-    var hex = 0x00ff00;
-    var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, 1, 0.05);
-    arrowHelper.velocity = new THREE.Vector3(
-      this.aim.x,
-      this.aim.y,
-      this.aim.z
-    );
 
-    this.arrows.push(arrowHelper);
-    this.scene.add(arrowHelper);
+    const laser = createLaser(this.position, this.aim);
+    this.lasers.push(laser);
+    this.scene.add(laser);
 
     socket.emit(SHOOT, {
       position: this.position,
