@@ -3,6 +3,8 @@ import { Text, View, Image } from 'react-native';
 import styles from '../styles/gameover';
 import { Button } from 'native-base';
 import TypeWriter from 'react-native-typewriter';
+import socket from '../socket';
+const LEAVE_ROOM = 'LEAVE_ROOM';
 
 const GameOver = props => {
   function goToLobby() {
@@ -10,6 +12,9 @@ const GameOver = props => {
   }
   function goToAllRooms() {
     //User Also has to leave room.
+    //TEST
+    let room = props.navigation.state.params.room;
+    socket.emit(LEAVE_ROOM, room);
     props.navigation.navigate('AllRooms');
   }
 

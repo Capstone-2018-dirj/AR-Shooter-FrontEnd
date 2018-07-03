@@ -25,7 +25,7 @@ export default class Lobby extends Component {
   componentDidMount() {
     let { navigate } = this.props.navigation;
     socket.on(GAME_STARTED, () => {
-      navigate('ARScene');
+      navigate('ARScene', { room: this.props.navigation.state.params.room });
     });
 
     socket.on(UPDATE_ROOMS, rooms => {
@@ -34,8 +34,6 @@ export default class Lobby extends Component {
     });
   }
 
-  componentWillUnmount() {
-  }
   startGame() {
     socket.emit(START_GAME);
   }
