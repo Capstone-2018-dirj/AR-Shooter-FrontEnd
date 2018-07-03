@@ -271,7 +271,7 @@ export default class App extends React.Component {
     this.heartHandler();
   };
   heartHandler = () => {
-    if (heartGrabbed(this.position, this.heart.position) && this.state.heart) {
+    if (this.state.heart && heartGrabbed(this.position, this.heart.position)) {
       socket.emit(HEART_PICKED_UP);
       this.setState(prevState => ({health: howMuchHealth(prevState)}))
     }
@@ -279,7 +279,6 @@ export default class App extends React.Component {
 
   showPosition = async () => {
     await playSound('shoot');
-    this.logs('OUR SCENE>>>>>', this.scene);
     this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
