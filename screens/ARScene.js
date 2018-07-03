@@ -11,7 +11,7 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
-
+import styles from '../styles/globals';
 const MAXRANGE = 5;
 
 // socket events
@@ -103,6 +103,26 @@ export default class App extends React.Component {
         }}
         onPress={this.showPosition}
         disabled={this.state.gameDisabled || this.state.hasShot}>
+        {this.state.health > 3 ? (
+          <View style={styles.topOverlay}>
+            <Progress.Bar
+              progress={this.state.health / 10}
+              color="#21ce99"
+              borderWidth={0}
+              width={120}
+              height={30}
+            />
+          </View>
+        ) : (
+          <View style={styles.topOverlay}>
+            <Progress.Bar
+              progress={this.state.health / 10}
+              color="red"
+              width={150}
+              height={30}
+            />
+          </View>
+        )}
         <GraphicsView
           style={{
             flex: 10
@@ -116,38 +136,12 @@ export default class App extends React.Component {
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
 
-        <View
-          style={{
-            position: 'absolute',
-            top: -70,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
+        <View style={styles.centerOverlay}>
           <Image
             style={{ width: 100, height: 100 }}
             source={require('../assets/images/crosshair.png')}
           />
         </View>
-        {this.state.health > 3 ? (
-          <Progress.Bar
-            progress={this.state.health / 10}
-            color="green"
-            borderWidth={0}
-            width={null}
-            height={50}
-          />
-        ) : (
-          <Progress.Bar
-            progress={this.state.health / 10}
-            color="red"
-            borderWidth={0}
-            width={null}
-            height={50}
-          />
-        )}
       </TouchableOpacity>
     );
   }
@@ -243,10 +237,10 @@ export default class App extends React.Component {
     this.arrows.push(arrowHelper);
     this.scene.add(arrowHelper);
 
-    // socket.emit(SHOOT, {
-    //   position: this.position,
-    //    aim: this.aim
-    //  });
+    socket.emit(SHOOT, {
+      position: this.position,
+       aim: this.aim
+     });
 
     this.cooldown();
   };

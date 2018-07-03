@@ -40,11 +40,10 @@ export default class App extends React.Component {
 
 const RootNavigator = createStackNavigator(
   {
-    ARScene: { screen: ARScene },
-
     Home: { screen: Home },
     AllRooms: { screen: AllRooms },
     Lobby: { screen: Lobby },
+    ARScene: { screen: ARScene },
     GameOver: { screen: GameOver },
     Winner: { screen: Winner }
   },
