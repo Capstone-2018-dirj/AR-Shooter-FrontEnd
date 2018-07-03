@@ -24,6 +24,8 @@ const SHOOT = 'SHOOT';
 const UPDATE_PLAYER_MOVEMENT = 'UPDATE_PLAYER_MOVEMENT';
 const YOU_HIT = 'YOU_HIT';
 const WINNER = 'WINNER';
+const HEART_PICKED_UP = 'HEART_PICKED_UP';
+const ERASE_HEART = 'ERASE_HEART';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -71,6 +73,10 @@ export default class App extends React.Component {
       setTimeout(() => this.setState({ crosshair: 150 }), 200);
     });
 
+    socket.on(ERASE_HEART, () => {
+      this.scene.remove(this.heart);
+    });
+
     socket.on(WINNER, () => {
       navigate('Winner', { room: this.props.navigation.state.params.room });
     });
@@ -83,6 +89,7 @@ export default class App extends React.Component {
         position: 'top'
       });
     });
+
     this.interval = setInterval(() => {
       socket.emit(UPDATE_PLAYER_MOVEMENT, {
         position: this.position,
@@ -258,8 +265,15 @@ export default class App extends React.Component {
       this.arrows.splice(index, 1);
     }
 
-    this.heart.rotation.y += Math.PI/32
+    this.heart.rotation.y += Math.PI / 32;
     this.renderer.render(this.scene, this.camera);
+    this.heartHandler();
+  };
+  heartHandler = () => {
+    this.logs('OUR POSITION>>>', this.position, '\n', 'HEART POSITION', this.heart.position);
+    if (heartPosition(this.position, this.heart.position)) {
+      socket.emit(HEART_PICKED_UP);
+    }
   };
 
   showPosition = async () => {
