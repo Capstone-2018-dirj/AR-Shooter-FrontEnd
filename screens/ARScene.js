@@ -251,6 +251,7 @@ export default class App extends React.Component {
       this.arrows.splice(index, 1);
     }
 
+    this.heart.rotation.y += Math.PI/32
     this.renderer.render(this.scene, this.camera);
   };
 
