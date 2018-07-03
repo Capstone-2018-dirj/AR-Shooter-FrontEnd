@@ -21,7 +21,7 @@ const ListPlayers = props => {
           {names &&
             names.map(name => {
               return (
-                <ListItem avatar key={name.name}>
+                <ListItem avatar key={name.id}>
                   <Left>
                     <Thumbnail
                       source={require('../assets/images/spa-helmet-512.png')}

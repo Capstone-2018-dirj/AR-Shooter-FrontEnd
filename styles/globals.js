@@ -48,6 +48,23 @@ const styles = {
   lobbyContainer: {
     marginLeft: 20,
     marginRight: 20
+  },
+  centerOverlay: {
+    position: 'absolute',
+    top: -20,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  topOverlay: {
+    position: 'absolute',
+    top: 35,
+    left: 15,
+    right: 0,
+    bottom: 0,
+    zIndex: 1000
   }
 };
 

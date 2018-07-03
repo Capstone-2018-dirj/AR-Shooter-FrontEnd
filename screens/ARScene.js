@@ -1,6 +1,6 @@
 import React from 'react';
 import { Toast } from 'native-base';
-import { TouchableOpacity, Vibration } from 'react-native';
+import { TouchableOpacity, Vibration, View, Image, Text } from 'react-native';
 import { AR, Audio } from 'expo';
 import * as Progress from 'react-native-progress';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
@@ -14,6 +14,7 @@ import socket from '../socket';
 import { loadSounds, playSound, prepareSound } from '../utils/sound'
 import laser from '../assets/audio/laser.mp3';
 
+import styles from '../styles/globals';
 const MAXRANGE = 5;
 
 // socket events
@@ -56,17 +57,18 @@ export default class App extends React.Component {
 
     socket.on(SHOT, () => {
       Vibration.vibrate(1000);
-
       this.setState(prevState => ({ health: prevState.health - 1 }));
+      if (this.state.health <= 0) {
+        navigate('GameOver');
+      }
     });
 
     socket.on(YOU_HIT, () => {
-      this.sphere.material.color.setHex(0x0000ff);
-      setTimeout(() => this.sphere.material.color.setHex(0xff0000), 500);
+      //do something with image
     });
 
     socket.on(WINNER, () => {
-      navigate('Winner')
+      navigate('Winner');
     });
 
     socket.on('disconnect', () => {
@@ -86,8 +88,10 @@ export default class App extends React.Component {
   }
 
   componentWillUnmount() {
+    clearInterval(this.interval);
     socket.off(SHOT);
     socket.off(UPDATE_PLAYER_MOVEMENT);
+    socket.off(WINNER);
     console.log = this.logs; // assigns console.log back to itself
   }
 
@@ -99,24 +103,33 @@ export default class App extends React.Component {
   };
 
   render() {
-    // You need to add the `isArEnabled` & `arTrackingConfiguration` props.
-    // `isArRunningStateEnabled` Will show us the play/pause button in the corner.
-    // `isArCameraStateEnabled` Will render the camera tracking information on the screen.
-    // `arTrackingConfiguration` denotes which camera the AR Session will use.
-    // World for rear, Face for front (iPhone X only)
-    const { navigate } = this.props.navigation;
-    if (this.state.health === 0) {
-      navigate('GameOver');
-    }
     return (
       <TouchableOpacity
         style={{
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}
-      >
-        (
+        disabled={this.state.gameDisabled || this.state.hasShot}>
+        {this.state.health > 3 ? (
+          <View style={styles.topOverlay}>
+            <Progress.Bar
+              progress={this.state.health / 10}
+              color="#21ce99"
+              borderWidth={0}
+              width={120}
+              height={30}
+            />
+          </View>
+        ) : (
+          <View style={styles.topOverlay}>
+            <Progress.Bar
+              progress={this.state.health / 10}
+              color="red"
+              width={120}
+              height={30}
+            />
+          </View>
+        )}
         <GraphicsView
           style={{
             flex: 10
@@ -129,24 +142,13 @@ export default class App extends React.Component {
           isArCameraStateEnabled
           arTrackingConfiguration={AR.TrackingConfigurations.World}
         />
-        {this.state.health > 3 ? (
-          <Progress.Bar
-            progress={this.state.health / 10}
-            color="green"
-            borderWidth={0}
-            width={null}
-            height={50}
+
+        <View style={styles.centerOverlay}>
+          <Image
+            style={{ width: 100, height: 100 }}
+            source={require('../assets/images/crosshair.png')}
           />
-        ) : (
-          <Progress.Bar
-            progress={this.state.health / 10}
-            color="red"
-            borderWidth={0}
-            width={null}
-            height={50}
-          />
-        )}
-        )
+        </View>
       </TouchableOpacity>
     );
   }
@@ -174,23 +176,11 @@ export default class App extends React.Component {
 
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
 
-    //sphere
-    const geometry = new THREE.SphereGeometry(0.0154);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-
-    // Combine our geometry and material
-    this.sphere = new THREE.Mesh(geometry, material);
-    this.sphere.position.z = 0;
-    this.sphere.position.x = this.camera.position.x;
-    this.sphere.position.y = this.camera.position.y;
-    // Add the sphere to the scene
     //=======================================================================
 
     // Setup a light so we can see the sphere color
     // AmbientLight colors all things in the scene equally.
     this.scene.add(new THREE.AmbientLight(0xffffff));
-
-    this.scene.add(this.sphere);
   };
 
   // When the phone rotates, or the view changes size, this method will be called.
@@ -210,9 +200,6 @@ export default class App extends React.Component {
     // Finally render the scene with the AR Camera
     this.camera.getWorldPosition(this.position);
     this.camera.getWorldDirection(this.aim);
-    this.sphere.position.x = this.position.x + this.aim.x;
-    this.sphere.position.y = this.position.y + this.aim.y;
-    this.sphere.position.z = this.position.z + this.aim.z;
     let index;
     this.arrows.forEach((arrow, i) => {
       // arrow.position.add(arrow.velocity)
@@ -237,8 +224,8 @@ export default class App extends React.Component {
   };
 
   showPosition = async () => {
-    playSound('hit')
-    // this.setState({ hasShot: true });
+    await playSound('hit')
+    this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
     var origin = new THREE.Vector3(
@@ -260,9 +247,9 @@ export default class App extends React.Component {
 
     socket.emit(SHOOT, {
       position: this.position,
-      aim: this.aim
-    });
+       aim: this.aim
+     });
 
-    // this.cooldown();
+    this.cooldown();
   };
 }
