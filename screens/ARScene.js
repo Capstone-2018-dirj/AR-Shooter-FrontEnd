@@ -119,7 +119,7 @@ export default class App extends React.Component {
         <View
           style={{
             position: 'absolute',
-            top: 0,
+            top: -70,
             left: 0,
             right: 0,
             bottom: 0,
@@ -243,10 +243,10 @@ export default class App extends React.Component {
     this.arrows.push(arrowHelper);
     this.scene.add(arrowHelper);
 
-    socket.emit(SHOOT, {
-      position: this.position,
-      aim: this.aim
-    });
+    // socket.emit(SHOOT, {
+    //   position: this.position,
+    //    aim: this.aim
+    //  });
 
     this.cooldown();
   };
