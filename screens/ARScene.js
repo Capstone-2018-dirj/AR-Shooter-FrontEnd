@@ -11,7 +11,7 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
-import { loadSounds, playSound, prepareSound } from '../utils/sound'
+import { loadSounds, playSound, prepareSound } from '../utils/sound';
 import laser from '../assets/audio/laser.mp3';
 
 import styles from '../styles/globals';
@@ -109,7 +109,8 @@ export default class App extends React.Component {
           flex: 1
         }}
         onPress={this.showPosition}
-        disabled={this.state.gameDisabled || this.state.hasShot}>
+        disabled={this.state.gameDisabled || this.state.hasShot}
+      >
         {this.state.health > 3 ? (
           <View style={styles.topOverlay}>
             <Progress.Bar
@@ -176,6 +177,35 @@ export default class App extends React.Component {
 
     this.camera = new ThreeAR.Camera(width, height, 0.01, 1000);
 
+    let x = 0,
+      y = 0;
+
+    const heartShape = new THREE.Shape();
+    heartShape.moveTo(x + 25, y + 25);
+    heartShape.bezierCurveTo(x + 25, y + 25, x + 20, y, x, y);
+    heartShape.bezierCurveTo(x - 30, y, x - 30, y + 35, x - 30, y + 35);
+    heartShape.bezierCurveTo(x - 30, y + 55, x - 10, y + 77, x + 25, y + 95);
+    heartShape.bezierCurveTo(x + 60, y + 77, x + 80, y + 55, x + 80, y + 35);
+    heartShape.bezierCurveTo(x + 80, y + 35, x + 80, y, x + 50, y);
+    heartShape.bezierCurveTo(x + 35, y, x + 25, y + 25, x + 25, y + 25);
+
+    const options = {
+      depth: 8,
+      bevelEnabled: true,
+      bevelSegments: 2,
+      steps: 2,
+      bevelSize: 1,
+      bevelThickness: 1
+    };
+
+    const heartGeometry = new THREE.ExtrudeGeometry(heartShape, options);
+    const heartMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+    this.heart = new THREE.Mesh(heartGeometry, heartMaterial);
+    this.heart.scale.set(0.005, 0.005, 0.005);
+    this.heart.position.set(1, 0, -1);
+    this.heart.rotation.set(0, 0, Math.PI);
+    this.scene.add(this.heart);
+
     //=======================================================================
 
     // Setup a light so we can see the sphere color
@@ -225,7 +255,7 @@ export default class App extends React.Component {
   };
 
   showPosition = async () => {
-    await playSound('hit')
+    await playSound('hit');
     this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
@@ -248,8 +278,8 @@ export default class App extends React.Component {
 
     socket.emit(SHOOT, {
       position: this.position,
-       aim: this.aim
-     });
+      aim: this.aim
+    });
 
     this.cooldown();
   };
