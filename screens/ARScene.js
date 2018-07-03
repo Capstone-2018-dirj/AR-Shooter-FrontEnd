@@ -273,7 +273,6 @@ export default class App extends React.Component {
   };
   heartHandler = () => {
     if (this.state.heart && heartGrabbed(this.position, this.heart.position)) {
-      this.logs('OUR HEALTH', this.state.health)
       this.setState(prevState => ({health: howMuchHealth(prevState.health)}))
       socket.emit(HEART_PICKED_UP);
     }
