@@ -1,7 +1,7 @@
 import React from 'react';
 import { Toast } from 'native-base';
 import { TouchableOpacity, Vibration } from 'react-native';
-import { AR } from 'expo';
+import { AR, Audio } from 'expo';
 import * as Progress from 'react-native-progress';
 // Let's alias ExpoTHREE.AR as ThreeAR so it doesn't collide with Expo.AR.
 import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
@@ -11,6 +11,8 @@ import ExpoTHREE, { AR as ThreeAR, THREE } from 'expo-three';
 import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
+import { loadSounds, playSound, prepareSound } from '../utils/sound'
+import laser from '../assets/audio/laser.mp3';
 
 const MAXRANGE = 5;
 
@@ -35,6 +37,10 @@ export default class App extends React.Component {
       health: 10
     };
     this.cooldown = this.cooldown.bind(this);
+    prepareSound();
+    loadSounds({
+      hit: laser
+    });
   }
   componentDidMount() {
     // Turn off extra warnings
@@ -230,7 +236,8 @@ export default class App extends React.Component {
     this.renderer.render(this.scene, this.camera);
   };
 
-  showPosition = () => {
+  showPosition = async () => {
+    playSound('hit')
     // this.setState({ hasShot: true });
     var dir = new THREE.Vector3(this.aim.x, this.aim.y, this.aim.z);
     dir.normalize();
