@@ -45,7 +45,7 @@ export default class Home extends Component {
             <Item floatingLabel autofocus="true">
               <Label>Player Name</Label>
               <Input
-                style={{ paddingRight: 0 }}
+                style={{ margin: 0 }}
                 value={this.state.playerName}
                 onChangeText={this.nameChangeHandler}
               />

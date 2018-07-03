@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Content, Button, Icon, Toast } from 'native-base';
-import { Text, View } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import socket from '../socket';
 import styles from '../styles/globals';
 import ListPlayers from '../components/listPlayers';
+import { AppLoading } from 'expo';
 
 const START_GAME = 'START_GAME';
 const GAME_STARTED = 'GAME_STARTED';
@@ -67,23 +68,39 @@ export default class Lobby extends Component {
         <Button
           style={styles.backButtonContainer}
           transparent
-          onPress={this.handleLeaveRoom}
-        >
+          onPress={this.handleLeaveRoom}>
           <Icon style={styles.backButton} name="arrow-back" />
         </Button>
         <Text style={styles.title}>Lobby</Text>
+
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            marginLeft: 20,
+            marginRight: 20
+            
+          }}>
+          <Image
+            style={styles.informativeImage}
+            source={require('../assets/images/Instructional.gif')}
+            onLoad={this.handleImageLoaded}
+          />
+          <Text style={styles.informativeText}>
+            Before Blasting off, ensure phones are upright and stacked on top of
+            eachother.
+          </Text>
+        </View>
         <Button
           bordered
           dark
           onPress={this.startGame}
           style={{
-            marginTop: 40,
-            marginLeft: 20,
-            marginRight: 20,
-            marginBottom: 20
+            marginLeft: 10,
+            marginRight: 10,
+            marginBottom: 10
           }}
-          full
-        >
+          full>
           <Text style={{ letterSpacing: 2 }}>Blast Off</Text>
         </Button>
         <Content>

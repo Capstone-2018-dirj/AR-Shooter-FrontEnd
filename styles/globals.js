@@ -26,9 +26,14 @@ const styles = {
     height: 200,
     resizeMode: 'contain'
   },
+  informativeImage: {
+    margin: 20,
+    width: 150,
+    height: 150
+  },
   informativeText: {
     textAlign: 'center',
-    marginTop: 10,
+    marginTop: 5,
     color: '#808080'
   },
   smallTitle: {
