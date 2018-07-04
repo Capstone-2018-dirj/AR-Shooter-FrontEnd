@@ -12,7 +12,7 @@ import { View as GraphicsView } from 'expo-graphics';
 // import { _throwIfAudioIsDisabled } from 'expo/src/av/Audio';
 import socket from '../socket';
 import { loadSounds, playSound, prepareSound } from '../utils/sound';
-import {heartGrabbed, howMuchHealth} from '../utils/heartPosition';
+import { heartGrabbed, howMuchHealth } from '../utils/heartPosition';
 import createLaser from '../utils/createLaser';
 import laserSound from '../assets/audio/laser.mp3';
 
@@ -69,11 +69,11 @@ export default class App extends React.Component {
       }
     });
 
-    socket.on(LASER_SHOT, ({position, aim}) => {
+    socket.on(LASER_SHOT, ({ position, aim }) => {
       let laser = createLaser(position, aim);
       this.lasers.push(laser);
       this.scene.add(laser);
-    })
+    });
 
     socket.on(YOU_HIT, () => {
       //do something with image, maybe zoom in for a second?
@@ -83,7 +83,7 @@ export default class App extends React.Component {
 
     socket.once(ERASE_HEART, () => {
       this.scene.remove(this.heart);
-      this.setState({heart: false})
+      this.setState({ heart: false });
     });
 
     socket.on(WINNER, () => {
@@ -100,7 +100,7 @@ export default class App extends React.Component {
     });
 
     this.interval = setInterval(() => {
-      this.heartHandler()
+      this.heartHandler();
       socket.emit(UPDATE_PLAYER_MOVEMENT, {
         position: this.position,
         aim: this.aim
@@ -269,12 +269,18 @@ export default class App extends React.Component {
 
     this.heart.rotation.y += Math.PI / 32;
     this.renderer.render(this.scene, this.camera);
-
   };
   heartHandler = () => {
-    if (this.state.heart && heartGrabbed(this.position, this.heart.position)) {
-      this.setState(prevState => ({health: howMuchHealth(prevState.health)}))
-      socket.emit(HEART_PICKED_UP);
+    if (this.heart) {
+      if (
+        this.state.heart &&
+        heartGrabbed(this.position, this.heart.position)
+      ) {
+        this.setState(prevState => ({
+          health: howMuchHealth(prevState.health)
+        }));
+        socket.emit(HEART_PICKED_UP);
+      }
     }
   };
 
