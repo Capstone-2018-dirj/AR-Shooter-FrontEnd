@@ -1,5 +1,4 @@
 import io from 'socket.io-client';
-import { SERVER_URL } from 'react-native-dotenv';
-export const host = SERVER_URL;
+export const host = 'https://ar-shooter-server.herokuapp.com/';
 const socket = io(host);
 export default socket;
